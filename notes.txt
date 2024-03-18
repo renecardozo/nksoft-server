@@ -1,0 +1,11 @@
+// to run migrations
+> php artisan migrate
+
+// tp create a model
+> php artisan make:model Docente
+
+// to create migration and table Docente
+php artisan make:migration create_docente_table
+
+// to create controller 
+php artisan make:controller DocenteController --resource
