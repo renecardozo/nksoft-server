@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,6 @@ Route::get('/roles', 'App\Http\Controllers\RoleController@index');
 Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
 Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
 Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
+
+//Usuarios
+Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
