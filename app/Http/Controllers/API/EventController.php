@@ -47,30 +47,30 @@ class EventController extends Controller
        return response()->json(['error'=> $th->getMessage()],500);
    }
      }
+    
+     public function update(Request $request,$id){
+      try{
 
-   public function update(Request $request,$id){
-     try{
-       $data['fecha']= $request ['fecha'];
-       $data['descripcion']= $request ['descripcion'];
-       $data['codigo']= $request ['codigo'];
-         
-       $res= Event::find($id);
+      //  $data['id']= $request ['id'];
+        $data['fecha']= $request ['fecha'];
+        $data['descripcion']= $request ['descripcion'];
+        $data['codigo']= $request ['codigo'];
+        Event::find($id)->update($data);
+        $res= Event::find($id);
            return response()->json($res, 200);
-       } catch(\Throwable $th){
-         return response()->json(['error'=> $th->getMessage()],500);
-     }
-   }
- 
+        } catch(\Throwable $th){
+          return response()->json(['error' => $th->getMessage()],500);
+      }
+    }
+  
 
    public function delete($id){
      try{
        
-       $res=event::find($id)->delete();
-       
-       return response()->json(["deleted"=> $res],00);
+       $res=Event::find($id)->delete();
+       return response()->json(["deleted" => $res ], 200);
      } catch(\Throwable $th){
-       return response()->json(['error'=> $th->getMessage()],500);
+       return response()->json(['error '=> $th->getMessage()],500);
    }
-
    }  
 }
