@@ -12,7 +12,7 @@ class RoleController extends Controller
     public function index()
     {
         try {
-            $roles = Role::orderBy('id', 'desc')->get(); 
+            $roles = Role::orderBy('id', 'desc')->get();
             return response()->json($roles);
         } catch (\Exception $exception) {
             return response()->json([
@@ -21,9 +21,10 @@ class RoleController extends Controller
             ], 500);
         }
     }
-    public function getPermissions() {
+    public function getPermissions()
+    {
         try {
-            $permissions = Permission::all('id','name');
+            $permissions = Permission::all('id', 'name');
             return response()->json($permissions);
         } catch (\Exception $exception) {
             return response()->json([
@@ -43,11 +44,28 @@ class RoleController extends Controller
         try {
             $role = Role::create(['name' => $validatedData['roleName'], 'state' => true]);
             $role->syncPermissions($validatedData['permissions']);
-            return response()->json(['success'=>true,'message' => 'Rol creado exitosamente', 'role' => $role], 201);
+            return response()->json(['success' => true, 'message' => 'Rol creado exitosamente', 'role' => $role], 201);
         } catch (\Exception $e) {
-            return response()->json(['success'=>false,'error' => 'Error al crear rol: '. $e->getMessage()], 500);
+            return response()->json(['success' => false, 'error' => 'Error al crear rol: ' . $e->getMessage()], 500);
         }
     }
+    public function editRole(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'roleName' => 'required|string',
+            'permissions' => 'required|array',
+        ]);
+
+        try {
+            $role = Role::findOrFail($id);
+            $role->update(['name' => $validatedData['roleName']]);
+            $role->syncPermissions($validatedData['permissions']);
+            return response()->json(['success' => true, 'message' => 'Rol actualizado exitosamente', 'role' => $role], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => 'Error al actualizar rol: ' . $e->getMessage()], 500);
+        }
+    }
+
 
     public function createPermission($permission)
     {
@@ -70,5 +88,19 @@ class RoleController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'No se pudo actualizar el estado del rol', 'error' => $e->getMessage()], 500);
         }
+    }
+    public function getRole($id)
+    {
+
+        $role = Role::with('permissions')->find($id);
+        if (!$role) {
+            return null;
+        }
+        $data = [
+            'roleName' => $role->name,
+            'permissions' => $role->permissions->pluck('name'),
+        ];
+
+        return $data;
     }
 }
