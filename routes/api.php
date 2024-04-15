@@ -22,3 +22,11 @@ Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
 Route::post('/docentes', 'App\Http\Controllers\DocenteController@store');
 Route::put('/docentes', 'App\Http\Controllers\DocenteController@update');
 Route::delete('/docentes/{id}', 'App\Http\Controllers\DocenteController@destroy');
+
+//Roles y permisos
+Route::get('/roles', 'App\Http\Controllers\RoleController@index');
+Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
+Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
+Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
+Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
+Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
