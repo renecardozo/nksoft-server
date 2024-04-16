@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
 
-use App\Http\Controllers\UserController;
-
 
 /*
 |--------------------------------------------------------------------------
