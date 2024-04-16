@@ -4,7 +4,7 @@ use App\Http\Controllers\API\EventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use APP\Http\Controllers\API\MateriaController;
-
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -57,3 +57,5 @@ Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRo
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
 Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 
+//Usuarios
+Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
