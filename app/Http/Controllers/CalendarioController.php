@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\calendario;
 use Illuminate\Http\Request;
-use App\Models\Docente;
 
-class DocenteController extends Controller
+class CalendarioController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +16,8 @@ class DocenteController extends Controller
      */
     public function index()
     {
-        $docentes = Docente::all();
-        return $docentes;
+        $calendarios = calendario::all();
+        return $calendarios;
     }
 
     /**
@@ -36,21 +38,17 @@ class DocenteController extends Controller
      */
     public function store(Request $request)
     {
-        $docente = new Docente();
-        $docente->first_name = $request->first_name;
-        $docente->last_name = $request->last_name;
-        $docente->cod_sis = $request->cod_sis;
-        $docente->ci = $request->ci;
-        $docente->save();
+        
     }
+       
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\calendario  $calendario
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(calendario $calendario)
     {
         //
     }
@@ -58,41 +56,34 @@ class DocenteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\calendario  $calendario
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(calendario $calendario)
     {
-        //
+        
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\calendario  $calendario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, calendario $calendario)
     {
-        $docente = Docente::findOrFail($request->id);
-        $docente->first_name = $request->first_name;
-        $docente->last_name = $request->last_name;
-        $docente->cod_sis = $request->cod_sis;
-        $docente->ci = $request->ci;
-        $docente->save();
-        return $docente;
+        //
     }
-  //*gestionar mensajes try h**/ 
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\calendario  $calendario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(calendario $calendario)
     {
-        $docente = Docente::destroy($request->id);
-        return $docente;
+        //
     }
 }
