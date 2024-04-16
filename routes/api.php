@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
 
+use App\Http\Controllers\UserController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -55,9 +58,8 @@ Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
 Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
 
 
-//Usuarios
-Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
-
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
 Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 
+//Usuarios
+Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
