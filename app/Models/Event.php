@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Materia extends Model
+
+class Event extends Model
 {
     use HasFactory;
-    protected $fillable = ['codigo', 'materia', 'grupo', 'departamento'];
-    protected $table = 'materia';
+    protected $fillable = ['fecha', 'descripcion', 'codigo'];
+    protected $table = 'events';
+
 }

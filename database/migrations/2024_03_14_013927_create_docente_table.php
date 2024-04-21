@@ -16,10 +16,10 @@ class CreateDocenteTable extends Migration
         Schema::create('docente', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('first_name');
+            $table->date('first_name');
             $table->string('last_name');
-            $table->integer('cod_sis');
-            $table->string('ci');
+            $table->string('cod_sis');
+            
         });
     }
 
