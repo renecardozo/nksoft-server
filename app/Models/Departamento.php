@@ -10,6 +10,9 @@ class Departamento extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['nombreDepartamentos'];
+
+
     public function unidades(): HasMany{
         return $this->hasMany(Unidad::class);
     }

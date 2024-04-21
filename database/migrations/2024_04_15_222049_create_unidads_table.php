@@ -15,9 +15,8 @@ class CreateUnidadsTable extends Migration
     {
         Schema::create('unidads', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('departamento_id');
+            $table->unsignedBigInteger('departamento_id')->nullable();
             $table->string('nombreUnidades');
-            $table->string('ubicacionUnidades');
             $table->time('horaAperturaUnidades');
             $table->time('horaCierreUnidades');
             $table->timestamps();

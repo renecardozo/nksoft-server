@@ -10,8 +10,8 @@ class Unidad extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['departamento_id','nombreUnidades', 'ubicacionUnidades', 
-    'horaAperturaUnidades', 'horaCierreUnidades'
+    protected $fillable = ['nombreUnidades', 
+    'horaAperturaUnidades', 'horaCierreUnidades','departamento_id',
     ];
 
     public function departamento(){

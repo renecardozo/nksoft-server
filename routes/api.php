@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\AulaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
+use App\Http\Controllers\DepartamentoController;
 
 
 /*
@@ -63,4 +65,14 @@ Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
 
 //Unidades
-Route::post('/registrar-departamento', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
+Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
+Route::get('/departamentos', 'App\Http\Controllers\DepartamentoController@mostrarDepartamento');
+Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
+Route::get('/unidades', 'App\Http\Controllers\UnidadController@mostrarUnidad');
+///Registro de aula
+
+
+    Route::post('/aulas', 'App\Http\Controllers\AulaController@registrarAula');
+    Route::get('/aulas', 'App\Http\Controllers\AulaController@mostrarAula');
+
+;
