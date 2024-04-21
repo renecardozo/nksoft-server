@@ -30,3 +30,6 @@ Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
 Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
 Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
+
+//Unidades
+Route::post('/registrar-departamento', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
