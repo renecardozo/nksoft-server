@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePeriodosTable extends Migration
+class AddNumeroPeriodoToPeriodosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreatePeriodosTable extends Migration
      */
     public function up()
     {
-        Schema::create('periodos', function (Blueprint $table) {
-            $table->id();
-            $table->time('horaInicio');
-            $table->time('horaFin');
-            $table->integer('numero_periodo');
-            $table->timestamps();
+        Schema::table('periodos', function (Blueprint $table) {
+            $table->integer('numero_periodo')->after('horafinal'); // Ajusta la posición según sea necesario
         });
     }
 
@@ -29,6 +25,8 @@ class CreatePeriodosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('periodos');
+        Schema::table('periodos', function (Blueprint $table) {
+            $table->dropColumn('numero_periodo');
+        });
     }
 }

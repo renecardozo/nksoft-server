@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
 use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\PeriodoController;
 
 
 /*
@@ -69,10 +70,12 @@ Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@regis
 Route::get('/departamentos', 'App\Http\Controllers\DepartamentoController@mostrarDepartamento');
 Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
 Route::get('/unidades', 'App\Http\Controllers\UnidadController@mostrarUnidad');
+
 ///Registro de aula
+Route::post('/aulas/registrar', 'App\Http\Controllers\AulaController@registrarAula');
+Route::get('/aulas/mostrar','App\Http\Controllers\AulaController@mostrarAula');
 
-
-    Route::post('/aulas', 'App\Http\Controllers\AulaController@registrarAula');
-    Route::get('/aulas', 'App\Http\Controllers\AulaController@mostrarAula');
+Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
+Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
 
 ;

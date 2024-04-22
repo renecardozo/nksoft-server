@@ -10,12 +10,8 @@ class Periodo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'horainicial',
-        'horafinal',
+        'horaInicio',
+        'horaFin',
+        'numero_periodo',
     ];
-
-    public function inhabilitados()
-    {
-        return $this->hasMany(Inhabilitado::class);
-    }
 }
