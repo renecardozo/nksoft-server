@@ -18,8 +18,8 @@ class AddFieldsToUsersTable extends Migration
             $table->string('ci')->nullable();
             $table->string('code_sis')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('role_id')->unsigned();            
-            $table->foreign('role_id')->references('id')->on('roles');
+            //$table->integer('role_id')->unsigned();            
+           // $table->foreign('role_id')->references('id')->on('roles');
         });
         //DB::update('alter table `inventories` modify `sku` VARCHAR(200) UNIQUE NOT NULL');
     }
@@ -31,8 +31,11 @@ class AddFieldsToUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('users');
+        /*
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['last_name', 'ci', 'code_sis','phone', 'role_id']);
         });
+        */
     }
 }
