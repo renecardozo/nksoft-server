@@ -8,8 +8,6 @@ use App\Http\Controllers\Controller;
 
 class UnidadController extends Controller
 {
-
-
     public function registrarUnidad(Request $request)
 {
     try {
@@ -24,7 +22,6 @@ class UnidadController extends Controller
     }
 }
 
-
     public function mostrarUnidad(){
         try{
             $data = Unidad::with('departamento')->get();
@@ -33,5 +30,4 @@ class UnidadController extends Controller
             return response()->json(['error' => $th -> getMessage()],500);
         }
     }
-    
 }

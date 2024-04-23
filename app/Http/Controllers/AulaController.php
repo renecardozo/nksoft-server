@@ -6,7 +6,6 @@ use App\Models\Aula;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-
 class AulaController extends Controller
 {
     public function registrarAula(Request $request)
@@ -43,4 +42,16 @@ class AulaController extends Controller
             return response()->json(['error' => 'Ocurrió un error al obtener las aulas'], 500);
         }
     }
+
+    public function mostrarAulaPorUnidad($unidadId)
+    {
+        try {
+            $aulas = Aula::where('unidad_id', $unidadId)->get();
+            return response()->json($aulas, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocurrió un error al obtener las aulas'], 500);
+        }
+    }
+    
+
 }

@@ -70,10 +70,14 @@ Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@regis
 Route::get('/departamentos', 'App\Http\Controllers\DepartamentoController@mostrarDepartamento');
 Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
 Route::get('/unidades', 'App\Http\Controllers\UnidadController@mostrarUnidad');
+Route::get('/unidades/obtenerNombre', 'App\Http\Controllers\UnidadController@obtenerNombre');
+
 
 ///Registro de aula
 Route::post('/aulas/registrar', 'App\Http\Controllers\AulaController@registrarAula');
 Route::get('/aulas/mostrar','App\Http\Controllers\AulaController@mostrarAula');
+Route::get('/aulas/mostrarId/{unidadId}', 'App\Http\Controllers\AulaController@mostrarAulaPorUnidad');
+
 
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
