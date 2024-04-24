@@ -38,11 +38,6 @@ Route::post('/materias', 'App\Http\Controllers\API\MateriaController@store');
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
 
-Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
-Route::post('/docentes', 'App\Http\Controllers\DocenteController@store');
-Route::put('/docentes', 'App\Http\Controllers\DocenteController@update');
-Route::delete('/docentes/{id}', 'App\Http\Controllers\DocenteController@destroy');
-
 Route::prefix('v1/event')->group(function(){
    Route::get('/',[ EventController::class, 'get'] );
    Route::post('/',[ EventController::class, 'create'] );

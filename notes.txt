@@ -9,3 +9,7 @@ php artisan make:migration create_docente_table
 
 // to create controller 
 php artisan make:controller DocenteController --resource
+
+// To run de seeder
+
+hp artisan db:seed
