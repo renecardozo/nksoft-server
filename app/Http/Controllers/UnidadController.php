@@ -30,4 +30,27 @@ class UnidadController extends Controller
             return response()->json(['error' => $th -> getMessage()],500);
         }
     }
+
+    public function actualizarUnidad(Request $request, $id)
+{
+    try {
+        $unidad = Unidad::findOrFail($id);
+        $request->validate([
+            'nombreUnidades' => 'required|string',
+            'horaAperturaUnidades' => 'required|string',
+            'horaCierreUnidades' => 'required|string',
+        ]);
+
+        $unidad->update([
+            'nombreUnidades' => $request->nombreUnidades,
+            'horaAperturaUnidades' => $request->horaAperturaUnidades,
+            'horaCierreUnidades' => $request->horaCierreUnidades,
+        ]);
+
+        return response()->json($unidad, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error al actualizar la unidad: ' . $e->getMessage()], 500);
+    }
+}
+
 }

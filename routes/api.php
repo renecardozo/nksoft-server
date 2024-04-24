@@ -71,13 +71,15 @@ Route::get('/departamentos', 'App\Http\Controllers\DepartamentoController@mostra
 Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
 Route::get('/unidades', 'App\Http\Controllers\UnidadController@mostrarUnidad');
 Route::get('/unidades/obtenerNombre', 'App\Http\Controllers\UnidadController@obtenerNombre');
+Route::put('/unidades/{id}', 'App\Http\Controllers\UnidadController@actualizarUnidad');
 
 
 ///Registro de aula
 Route::post('/aulas/registrar', 'App\Http\Controllers\AulaController@registrarAula');
 Route::get('/aulas/mostrar','App\Http\Controllers\AulaController@mostrarAula');
 Route::get('/aulas/mostrarId/{unidadId}', 'App\Http\Controllers\AulaController@mostrarAulaPorUnidad');
-
+Route::post('/aulas/post', 'App\Http\Controllers\AulaController@postAula');
+Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
