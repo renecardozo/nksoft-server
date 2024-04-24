@@ -50,7 +50,7 @@ Route::prefix('v1/event')->group(function(){
    Route::put('/{id}',[ EventController::class, 'update'] );
    Route::delete('/{id}',[ EventController::class, 'delete'] );
 });
-   
+
 
 //Roles y permisos
 Route::get('/roles', 'App\Http\Controllers\RoleController@index');
