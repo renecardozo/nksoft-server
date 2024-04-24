@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -51,10 +52,20 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al crear usuario', 'error' => $validator->errors()], 400);
         } else {
-            User::create($request->all());
+            $user=$this->filterDataToUpdate($request);
+            $newUser=User::create($user);
+            $role=Role::findById(intval($request->role_id));
+            $newUser->assignRole($role);
             return response()->json(['success' => true, 'message' => 'Usuario creado exitosamente'], 201);
         }
     }
+    protected function filterDataToUpdate(Request $request)
+    {
+        $data = array_filter($request->only(['name', 'last_name', 'ci', 'code_sis','email','phone']), fn ($value) => $value !== null);
+
+        return $data;
+    }
+
 
     /**
      * Display the specified resource.
@@ -102,7 +113,10 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al actualizar usuario', 'error' => $validator->errors()], 400);
         } else {
-            User::where('id', $id)->update($request->all());
+            $user=$this->filterDataToUpdate($request);
+            $userUpdate= User::where('id', $id)->update($request->all());  
+            $role=Role::findById(intval($request->role_id));
+            $userUpdate->syncRoles($role);
             return response()->json(['success' => true, 'message' => 'Usuario actualizado exitosamente'], 201);
         }
     }

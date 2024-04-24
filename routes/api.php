@@ -58,9 +58,9 @@ Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions')
 Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
 Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
 
-
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
 Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
+Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
 Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
