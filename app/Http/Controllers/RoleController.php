@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -44,6 +45,7 @@ class RoleController extends Controller
         try {
             $role = Role::create(['name' => $validatedData['roleName'], 'state' => true]);
             $role->syncPermissions($validatedData['permissions']);
+           // $this->writerRoute($validatedData['roleName'], $validatedData['permissions']);
             return response()->json(['success' => true, 'message' => 'Rol creado exitosamente', 'role' => $role], 201);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => 'Error al crear rol: ' . $e->getMessage()], 500);
@@ -102,5 +104,34 @@ class RoleController extends Controller
         ];
 
         return $data;
+    }
+    public function getRoles()
+    {
+
+        $roles = Role::with('permissions')->get();
+        if (!$roles) {
+            return null;
+        }
+        $rolesWithPermissions = [];
+
+        foreach ($roles as $role) {
+            $permissions = $role->permissions->pluck('name')->toArray();
+            $rolesWithPermissions[] = [
+                'roleName' => $role->name,
+                'permissions' => $permissions
+            ];
+        }
+
+        return $rolesWithPermissions;
+    }
+    public function writerRoute($roleName, $permissions)
+    {
+        $filePath = base_path('routes/api.php');
+
+        $content = "Route::middleware(['role:$roleName'])->group(function(){\n";
+        $content .= "    Route::get('Borrar', [UserController::class, 'index'])->name('users.index');\n";
+        $content .= "});\n";
+
+        File::append($filePath, $content);
     }
 }
