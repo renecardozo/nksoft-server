@@ -59,3 +59,9 @@ Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
 Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
+Route::middleware(['role:Prueba1'])->group(function(){
+   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
+   Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
+   Route::delete('usuarios/{id}', 'App\Http\Controllers\UserController@deleteUsuarios');
+   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias');
+});

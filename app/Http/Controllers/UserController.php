@@ -114,7 +114,7 @@ class UserController extends Controller
             return response()->json(['error' => true, 'message' => 'Error al actualizar usuario', 'error' => $validator->errors()], 400);
         } else {
             $user=$this->filterDataToUpdate($request);
-            $userUpdate= User::where('id', $id)->update($request->all());  
+            $userUpdate =User::where('id', $id)->update($user);  
             $role=Role::findById(intval($request->role_id));
             $userUpdate->syncRoles($role);
             return response()->json(['success' => true, 'message' => 'Usuario actualizado exitosamente'], 201);
