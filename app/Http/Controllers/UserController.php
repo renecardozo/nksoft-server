@@ -52,16 +52,16 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al crear usuario', 'error' => $validator->errors()], 400);
         } else {
-            $user=$this->filterDataToUpdate($request);
-            $newUser=User::create($user);
-            $role=Role::findById(intval($request->role_id));
-            $newUser->assignRole($role);
+            $user = $this->filterDataToUpdate($request);
+            $newUser = User::create($user);
+            $role = Role::findById(intval($request->role_id));
+            $newUser->syncRoles([$role->name]);
             return response()->json(['success' => true, 'message' => 'Usuario creado exitosamente'], 201);
         }
     }
     protected function filterDataToUpdate(Request $request)
     {
-        $data = array_filter($request->only(['name', 'last_name', 'ci', 'code_sis','email','phone']), fn ($value) => $value !== null);
+        $data = array_filter($request->only(['name', 'last_name', 'ci', 'code_sis', 'email', 'phone']), fn ($value) => $value !== null);
 
         return $data;
     }
@@ -78,7 +78,7 @@ class UserController extends Controller
         if (@User::find($id) == null) {
             return response()->json(['error' => true, 'message' => 'User not found'], 404);
         }
-        return response()->json(@User::find($id));
+        return response()->json(new UserResource(User::find($id)));
     }
 
     /**
@@ -104,19 +104,20 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'last_name' => 'required',
-            'ci' => 'required|unique:users,ci,'.$id,
-            'code_sis' => 'required|unique:users,code_sis,'.$id,
-            'email' => 'required|unique:users,email,'.$id,
+            'ci' => 'required|unique:users,ci,' . $id,
+            'code_sis' => 'required|unique:users,code_sis,' . $id,
+            'email' => 'required|unique:users,email,' . $id,
             'phone' => 'required',
             'role_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al actualizar usuario', 'error' => $validator->errors()], 400);
         } else {
-            $user=$this->filterDataToUpdate($request);
-            $userUpdate =User::where('id', $id)->update($user);  
-            $role=Role::findById(intval($request->role_id));
-            $userUpdate->syncRoles($role);
+            $data_update = $this->filterDataToUpdate($request);
+            $user = User::find($id);
+            $user->update($data_update);
+            $role = Role::findById(intval($request->role_id));
+            $user->syncRoles([$role->name]);
             return response()->json(['success' => true, 'message' => 'Usuario actualizado exitosamente'], 201);
         }
     }
