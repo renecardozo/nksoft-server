@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
+use App\Http\Controllers\AuthController;
 
 
 /*
@@ -46,7 +47,7 @@ Route::prefix('v1/event')->group(function(){
    Route::delete('/{id}',[ EventController::class, 'delete'] );
 });
 
-
+Route::post('/login', [ AuthController::class, 'login']);
 //Roles y permisos
 Route::get('/roles', 'App\Http\Controllers\RoleController@index');
 Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
@@ -58,7 +59,10 @@ Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
-Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
+
+Route::get('/users',  'App\Http\Controllers\UserController@index');
+Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
+
 
 //Unidades
 Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
@@ -78,5 +82,3 @@ Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
-
-;
