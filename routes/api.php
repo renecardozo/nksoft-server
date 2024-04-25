@@ -1,10 +1,14 @@
 <?php
 
 use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\AulaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
+use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\PeriodoController;
+use App\Http\Controllers\AuthController;
 
 
 /*
@@ -35,11 +39,6 @@ Route::post('/materias', 'App\Http\Controllers\API\MateriaController@store');
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
 
-Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
-Route::post('/docentes', 'App\Http\Controllers\DocenteController@store');
-Route::put('/docentes', 'App\Http\Controllers\DocenteController@update');
-Route::delete('/docentes/{id}', 'App\Http\Controllers\DocenteController@destroy');
-
 Route::prefix('v1/event')->group(function(){
    Route::get('/',[ EventController::class, 'get'] );
    Route::post('/',[ EventController::class, 'create'] );
@@ -47,6 +46,8 @@ Route::prefix('v1/event')->group(function(){
    Route::put('/{id}',[ EventController::class, 'update'] );
    Route::delete('/{id}',[ EventController::class, 'delete'] );
 });
+
+Route::post('/login', [ AuthController::class, 'login']);
 //Roles y permisos
 Route::get('/roles', 'App\Http\Controllers\RoleController@index');
 Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
@@ -58,10 +59,26 @@ Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
-Route::resource('users', UserController::class, ['except' => ['create', 'edit']]);
-Route::middleware(['role:Prueba1'])->group(function(){
-   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
-   Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
-   Route::delete('usuarios/{id}', 'App\Http\Controllers\UserController@deleteUsuarios');
-   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias');
-});
+
+Route::get('/users',  'App\Http\Controllers\UserController@index');
+Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
+
+
+//Unidades
+Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
+Route::get('/departamentos', 'App\Http\Controllers\DepartamentoController@mostrarDepartamento');
+Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
+Route::get('/unidades', 'App\Http\Controllers\UnidadController@mostrarUnidad');
+Route::get('/unidades/obtenerNombre', 'App\Http\Controllers\UnidadController@obtenerNombre');
+Route::put('/unidades/{id}', 'App\Http\Controllers\UnidadController@actualizarUnidad');
+
+
+///Registro de aula
+Route::post('/aulas/registrar', 'App\Http\Controllers\AulaController@registrarAula');
+Route::get('/aulas/mostrar','App\Http\Controllers\AulaController@mostrarAula');
+Route::get('/aulas/mostrarId/{unidadId}', 'App\Http\Controllers\AulaController@mostrarAulaPorUnidad');
+Route::post('/aulas/post', 'App\Http\Controllers\AulaController@postAula');
+Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
+
+Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
+Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
