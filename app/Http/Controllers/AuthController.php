@@ -34,4 +34,25 @@ class AuthController extends Controller
         return response()->json(new UserResource(User::find($id)));
     }
 
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function admin(Request $request)
+    {
+        $email = $request['email'];
+        $password = $request['password'];
+        // Find the user by email
+        $user = User::where('password', $password)->where('email', $email)->first();
+        echo  "\n";
+        if (!$user) {
+            // Authentication failed...
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        // Authentication passed...
+        return response()->json(new UserResource(User::find($user['id'])));
+    }
+
 }
