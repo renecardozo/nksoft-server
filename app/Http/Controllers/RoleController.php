@@ -60,13 +60,27 @@ class RoleController extends Controller
 
         try {
             $role = Role::findOrFail($id);
+            $this->deleteFragmentRoute($role->name);
             $role->update(['name' => $validatedData['roleName']]);
             $role->syncPermissions($validatedData['permissions']);
+            $this->writerRoute($validatedData['roleName'], $validatedData['permissions']);
             return response()->json(['success' => true, 'message' => 'Rol actualizado exitosamente', 'role' => $role], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => 'Error al actualizar rol: ' . $e->getMessage()], 500);
         }
     }
+    public function deleteFragmentRoute($roleName)
+    {
+        $filePath = base_path('routes/api.php');
+        $contenido = file_get_contents($filePath);
+
+        $inicio = strpos($contenido, "#$roleName-ini");
+        $fin = strpos($contenido, "#$roleName-fin") + strlen("#$roleName-fin");
+
+        $nuevoContenido = substr_replace($contenido, '', $inicio, $fin - $inicio);
+        File::put($filePath, $nuevoContenido);
+    }
+
 
 
     public function createPermission($permission)
@@ -117,6 +131,7 @@ class RoleController extends Controller
         foreach ($roles as $role) {
             $permissions = $role->permissions->pluck('name')->toArray();
             $rolesWithPermissions[] = [
+                'id' => $role->id,
                 'roleName' => $role->name,
                 'permissions' => $permissions
             ];
@@ -127,26 +142,24 @@ class RoleController extends Controller
     public function writerRoute($roleName, $permissions)
     {
         $filePath = base_path('routes/api.php');
-    
-        // Definimos el middleware una vez fuera del bucle
-        $middlewareContent = "Route::middleware(['role:$roleName'])->group(function(){\n";
-    
-        // Recorremos los permisos y generamos una ruta para cada uno
+        $middlewareContent = "#$roleName-ini\n";
+        $middlewareContent .= "Route::middleware(['role:$roleName'])->group(function(){\n";
+
         foreach ($permissions as $permission) {
-            $route=$this->getRoute($permission);
+            $route = $this->getRoute($permission);
             $routeContent = "   Route::{$route['method']}('{$route['url']}', 'App\\Http\\Controllers\\{$route['controller']}@{$route['function']}');\n";
             $middlewareContent .= $routeContent;
         }
-    
-        // Cerramos el grupo del middleware al final
+
         $middlewareContent .= "});\n";
-    
-        // Agregamos el contenido al archivo api.php
+        $middlewareContent .= "#$roleName-fin\n";
         File::append($filePath, $middlewareContent);
     }
-    public function getRoute($permission){
+    public function getRoute($permission)
+    {
 
         $pathNames = [
+
             [
                 'id' => 1,
                 'permission' => 'crear-feriados',
@@ -223,7 +236,7 @@ class RoleController extends Controller
                 'id' => 10,
                 'permission' => 'crear-roles',
                 'controller' => 'RolController',
-                'url' => 'roles',
+                'url' => '/create',
                 'method' => 'post',
                 'function' => 'createRoles'
             ],
@@ -231,49 +244,89 @@ class RoleController extends Controller
                 'id' => 11,
                 'permission' => 'editar-roles',
                 'controller' => 'RolController',
-                'url' => 'roles/{id}',
-                'method' => 'put',
+                'url' => '/editar/{id}',
+                'method' => 'post',
                 'function' => 'editRoles'
             ],
             [
                 'id' => 12,
                 'permission' => 'eliminar-roles',
                 'controller' => 'RolController',
-                'url' => 'roles/{id}',
+                'url' => '/update/{id}',
                 'method' => 'delete',
-                'function' => 'deleteRoles'
+                'function' => 'updateStateRole'
             ],
             [
                 'id' => 13,
-                'permission' => 'crear-materias',
+                'permission' => 'obtener-materias',
                 'controller' => 'MateriaController',
                 'url' => 'materias',
-                'method' => 'post',
-                'function' => 'createMaterias'
+                'method' => 'get',
+                'function' => 'index'
             ],
             [
                 'id' => 14,
-                'permission' => 'editar-materias',
+                'permission' => 'registrar-materias',
                 'controller' => 'MateriaController',
-                'url' => 'materias/{id}',
-                'method' => 'put',
-                'function' => 'editMaterias'
+                'url' => 'materias',
+                'method' => 'post',
+                'function' => 'store'
             ],
             [
                 'id' => 15,
-                'permission' => 'eliminar-materias',
+                'permission' => 'actualizar-materias',
                 'controller' => 'MateriaController',
-                'url' => 'materias/{id}',
-                'method' => 'delete',
-                'function' => 'deleteMaterias'
+                'url' => 'materias',
+                'method' => 'put',
+                'function' => 'update'
             ],
+            [
+                'id' => 16,
+                'permission' => 'crear-departamentos',
+                'controller' => 'DepartamentoController',
+                'url' => '/departamentos',
+                'method' => 'post',
+                'function' => 'registrarDepartamento'
+            ],
+            [
+                'id' => 17,
+                'permission' => 'crear-unidad',
+                'controller' => 'UnidadController',
+                'url' => '/unidades',
+                'method' => 'post',
+                'function' => 'registrarUnidad'
+            ],
+            [
+                'id' => 18,
+                'permission' => 'actualizar-unidad',
+                'controller' => 'UnidadController',
+                'url' => '/unidades/{id}',
+                'method' => 'post',
+                'function' => 'actualizarUnidad'
+            ],
+            [
+                'id' => 19,
+                'permission' => 'registrar-aula',
+                'controller' => 'AulaController',
+                'url' => '/aulas/registrar',
+                'method' => 'post',
+                'function' => 'registrarAula'
+            ],
+            [
+                'id' => 20,
+                'permission' => 'actualizar-aula',
+                'controller' => 'AulaController',
+                'url' => '/aulas/{id}',
+                'method' => 'put',
+                'function' => 'registrarAula'
+            ],
+
         ];
-        foreach ($pathNames as $path){
-            if($path['permission'] == $permission){
+        foreach ($pathNames as $path) {
+            if ($path['permission'] == $permission) {
                 return $path;
             }
         }
         return null;
-        
     }
 }
