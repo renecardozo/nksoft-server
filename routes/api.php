@@ -36,3 +36,8 @@ Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
 Route::post('/docentes', 'App\Http\Controllers\DocenteController@store');
 Route::put('/docentes', 'App\Http\Controllers\DocenteController@update');
 Route::delete('/docentes/{id}', 'App\Http\Controllers\DocenteController@destroy');
+
+Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
+Route::get('/departamentos', 'App\Http\Controllers\DepartamentoController@mostrarDepartamento');
+Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
+Route::get('/unidades', 'App\Http\Controllers\UnidadController@mostrarUnidad');

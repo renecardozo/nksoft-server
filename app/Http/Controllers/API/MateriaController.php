@@ -17,6 +17,7 @@ class MateriaController extends Controller
         $materia->codigo = $request->codigo;
         $materia->materia = $request->materia;
         $materia->grupo = $request->grupo;
+        $materia->docente = $request->docente;
         $materia->departamento = $request->departamento;
         $materia->save();
     }
@@ -42,6 +43,7 @@ class MateriaController extends Controller
             $data['codigo']=$request['codigo'];
             $data['materia']=$request['materia'];
             $data['grupo']=$request['grupo'];
+            $data['docente']=$request['docente'];
             $data['departamento']=$request['departamento'];
             $res = Materia::create($data);
             return response()->json($res, 200);
@@ -64,6 +66,7 @@ class MateriaController extends Controller
             $data['codigo']=$request['codigo'];
             $data['materia']=$request['materia'];
             $data['grupo']=$request['grupo'];
+            $data['docente']=$request['docente'];
             $data['departamento']=$request['departamento'];
             Materia::find($id)->update($data);
             $res = Materia::find($id);
