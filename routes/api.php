@@ -26,16 +26,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1/materias')->group(function () {
-    Route::get('/',[ MateriaController::class, 'get']);
-    Route::post('/',[ MateriaController::class, 'store']);
-    Route::get('/{id}',[ MateriaController::class, 'getById']);
-    Route::put('/{id}',[ MateriaController::class, 'update']);
-    Route::delete('/{id}',[ MateriaController::class, 'delete']);
-});
+
 
 Route::get('/materias', 'App\Http\Controllers\API\MateriaController@index');
 Route::post('/materias', 'App\Http\Controllers\API\MateriaController@store');
+Route::post('/materias2', 'App\Http\Controllers\API\MateriaController@guardar');
+Route::post('/materiasDuplicado', 'App\Http\Controllers\API\MateriaController@verificar'); 
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
 
