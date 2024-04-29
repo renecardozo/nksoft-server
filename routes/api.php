@@ -30,6 +30,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/materias', 'App\Http\Controllers\API\MateriaController@index');
 Route::post('/materias', 'App\Http\Controllers\API\MateriaController@store');
+Route::post('/materias2', 'App\Http\Controllers\API\MateriaController@guardar');
+Route::post('/materiasDuplicado', 'App\Http\Controllers\API\MateriaController@verificar'); 
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
 

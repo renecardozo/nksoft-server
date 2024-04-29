@@ -22,6 +22,17 @@ class MateriaController extends Controller
         $materia->save();
     }
 
+    public function guardar(Request $request)
+    {
+        $materia = new Materia();
+        $materia->codigo = $request->codigo;
+        $materia->materia = $request->materia;
+        $materia->grupo = $request->grupo;
+        $materia->docente = $request->docente;
+        $materia->departamento = $request->departamento;
+        $materia->save();
+    }
+
     public function index()
     {
         $materias = Materia::all();
@@ -50,6 +61,19 @@ class MateriaController extends Controller
         }catch(\Throwable $th){
             return response()->json(['error' => $th -> getMessage()],500);
         }
+    }
+
+    public function verificar(Request $request)
+    {
+        
+        $materia = $request->input('materia');
+        $grupo = $request->input('grupo');
+
+        $duplicados = Materia::where('materia', $materia)
+                             ->where('grupo', $grupo)
+                             ->exists();
+
+        return response()->json(['duplicados' => $duplicados]);
     }
 
     public function getById($id){
