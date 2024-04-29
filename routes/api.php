@@ -54,6 +54,7 @@ Route::get('/roles', 'App\Http\Controllers\RoleController@index');
 Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
 Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
 Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
+
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
 Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
@@ -85,39 +86,6 @@ Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
-
-
-
-#Docente-ini
-Route::middleware(['role:Docente'])->group(function(){
-   Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@registrarAula');
-   Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
-});
-#Docente-fin
-#Admin-ini
-Route::middleware(['role:Admin'])->group(function(){
-   Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@registrarAula');
-   Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
-   Route::delete('/update/{id}', 'App\Http\Controllers\RolController@updateStateRole');
-   Route::put('usuarios/{id}', 'App\Http\Controllers\UserController@editUsuarios');
-   Route::post('calendario', 'App\Http\Controllers\CalendarioController@createCalendario');
-   Route::delete('feriados/{id}', 'App\Http\Controllers\FeriadoController@deleteFeriados');
-   Route::post('usuarios', 'App\Http\Controllers\UserController@createUsuarios');
-   Route::post('/editar/{id}', 'App\Http\Controllers\RolController@editRoles');
-   Route::put('materias', 'App\Http\Controllers\MateriaController@update');
-   Route::post('/aulas/registrar', 'App\Http\Controllers\AulaController@registrarAula');
-   Route::post('/unidades/{id}', 'App\Http\Controllers\UnidadController@actualizarUnidad');
-   Route::post('materias', 'App\Http\Controllers\MateriaController@store');
-   Route::post('/create', 'App\Http\Controllers\RolController@createRoles');
-   Route::delete('calendario/{id}', 'App\Http\Controllers\CalendarioController@deleteCalendario');
-   Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
-   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
-   Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
-   Route::delete('usuarios/{id}', 'App\Http\Controllers\UserController@deleteUsuarios');
-   Route::get('materias', 'App\Http\Controllers\MateriaController@index');
-   Route::post('/unidades', 'App\Http\Controllers\UnidadController@registrarUnidad');
-});
-#Admin-fin
 Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
    Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');

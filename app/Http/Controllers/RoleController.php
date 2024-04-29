@@ -236,7 +236,7 @@ class RoleController extends Controller
                 'id' => 10,
                 'permission' => 'crear-roles',
                 'controller' => 'RolController',
-                'url' => '/create',
+                'url' => '/roles',
                 'method' => 'post',
                 'function' => 'createRoles'
             ],
@@ -244,7 +244,7 @@ class RoleController extends Controller
                 'id' => 11,
                 'permission' => 'editar-roles',
                 'controller' => 'RolController',
-                'url' => '/editar/{id}',
+                'url' => '/roles/{id}',
                 'method' => 'post',
                 'function' => 'editRoles'
             ],
@@ -252,7 +252,7 @@ class RoleController extends Controller
                 'id' => 12,
                 'permission' => 'eliminar-roles',
                 'controller' => 'RolController',
-                'url' => '/update/{id}',
+                'url' => '/roles/{id}',
                 'method' => 'delete',
                 'function' => 'updateStateRole'
             ],
