@@ -73,7 +73,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getById($id)
     {
         if (@User::find($id) == null) {
             return response()->json(['error' => true, 'message' => 'User not found'], 404);
