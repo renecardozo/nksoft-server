@@ -14,10 +14,33 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
-            'name' => 'Administrador',
+        $permissions = [
+            'actualizar-aula',
+            'registrar-aula',
+            'actualizar-unidad',
+            'crear-unidad',
+            'crear-departamentos',
+            'actualizar-materias',
+            'registrar-materias',
+            'obtener-materias',
+            'eliminar-roles',
+            'editar-roles',
+            'crear-roles',
+            'eliminar-usuarios',
+            'editar-usuarios',
+            'crear-usuarios',
+            'eliminar-calendario',
+            'editar-calendario',
+            'crear-calendario',
+             'eliminar-feriados',
+             'editar-feriados',
+             'crear-feriados',
+        ];
+       $role= Role::create([
+            'name' => 'SuperAdmin',
             'guard_name'=>'api',
             'state'=>true,
         ]);
+        $role->syncPermissions($permissions);
     }
 }
