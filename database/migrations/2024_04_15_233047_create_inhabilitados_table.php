@@ -16,7 +16,7 @@ class CreateInhabilitadosTable extends Migration
         Schema::create('inhabilitados', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('aula_id');
-            $table->unsignedBigInteger('periodo_id');
+            $table->unsignedBigInteger('periodo_id')->nullable() ; 
             $table->date('fecha');
             $table->timestamps();
         });
