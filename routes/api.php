@@ -78,8 +78,9 @@ Route::get('/aulas/mostrar','App\Http\Controllers\AulaController@mostrarAula');
 Route::get('/aulas/mostrarId/{unidadId}', 'App\Http\Controllers\AulaController@mostrarAulaPorUnidad');
 Route::post('/aulas/post', 'App\Http\Controllers\AulaController@postAula');
 Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
-
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
+//habilitacion
+Route::post('/aulas/{id}/deshabilitar', 'App\Http\Controllers\AulaController@deshabilitarAula');
 
 ;

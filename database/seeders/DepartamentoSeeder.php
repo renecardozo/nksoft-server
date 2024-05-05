@@ -18,9 +18,18 @@ class DepartamentoSeeder extends Seeder
         Departamento::create([
             'nombreDepartamentos' => 'Química',
         ]);
-
         Departamento::create([
             'nombreDepartamentos' => 'Física',
         ]);
+        Departamento::create([
+            'nombreDepartamentos' => 'Informática y Sistemas',
+        ]);
+        Departamento::create([
+            'nombreDepartamentos' => 'Eléctrica y Electrónica',
+        ]);
+        Departamento::create([
+            'nombreDepartamentos' => 'Industrial',
+        ]);
+        
     }
 }

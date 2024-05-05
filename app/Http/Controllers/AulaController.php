@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Aula;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Inhabilitado;
 
 class AulaController extends Controller
 {
@@ -16,6 +17,8 @@ class AulaController extends Controller
                 'nombreAulas' => $request->nombreAulas,
                 'capacidadAulas' => $request->capacidadAulas,
             ]);
+
+            Inhabilitado::where('aula_id', $aula->id)->delete();
 
             return response()->json($aula, 201);
         } catch (\Illuminate\Database\QueryException $e) {
@@ -44,16 +47,14 @@ class AulaController extends Controller
             return response()->json(['error' => 'Ocurrió un error al obtener las aulas'], 500);
         }
     }
-    
-    public function postAula(Request $request)
-{
-    try {
+        public function postAula(Request $request){
+            try {
         // Validar los datos de la solicitud
-        $request->validate([
+            $request->validate([
             'unidad_id' => 'required|exists:unidades,id',
             'nombreAulas' => 'required|string',
             'capacidadAulas' => 'required|string',
-        ]);
+            ]);
 
         // Crear el nuevo aula
         $aula = Aula::create([
@@ -71,9 +72,8 @@ class AulaController extends Controller
         return response()->json(['error' => 'Ocurrió un error inesperado'], 500);
     }
 }
-public function updateAula(Request $request, $id)
-{
-    try {
+    public function updateAula(Request $request, $id){
+        try {
         $aula = Aula::findOrFail($id);
         $request->validate([
             'nombreAulas' => 'required|string',
@@ -83,10 +83,29 @@ public function updateAula(Request $request, $id)
             'nombreAulas' => $request->nombreAulas,
             'capacidadAulas' => $request->capacidadAulas,
         ]);
+            return response()->json($aula, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al actualizar el aula: ' . $e->getMessage()], 500);
+        }
+    }
 
-        return response()->json($aula, 200);
+    public function deshabilitarAula($id)
+{
+    try {
+        $aula = Aula::findOrFail($id);
+
+        if ($aula->inhabilitados()->exists()) {
+            return response()->json(['error' => 'El aula ya está inhabilitada'], 400);
+        }
+
+        Inhabilitado::create([
+            'aula_id' => $aula->id,
+            
+            'fecha' => now(),
+        ]);
+        return response()->json(['message' => 'Aula deshabilitada correctamente'], 200);
     } catch (\Exception $e) {
-        return response()->json(['error' => 'Error al actualizar el aula: ' . $e->getMessage()], 500);
+        return response()->json(['error' => 'Error al deshabilitar el aula: ' . $e->getMessage()], 500);
     }
 }
 
