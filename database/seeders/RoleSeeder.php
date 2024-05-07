@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -42,5 +43,16 @@ class RoleSeeder extends Seeder
             'state'=>true,
         ]);
         $role->syncPermissions($permissions);
+        $user= User::create([
+            'name' => 'Edgar',
+            'email'=>'edgar@gmail.com',
+            'password'=>'12345678',
+            'last_name'=>'alachi',
+            'ci'=>'987654321',
+            'code_sis'=>'201807550',
+            'phone'=>'234324232',
+            
+        ]);
+        $$user->assignRole('SuperAdmin');
     }
 }

@@ -98,4 +98,10 @@ Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::delete('roles/{id}', 'App\Http\Controllers\RolController@deleteRoles');
    Route::put('usuarios/{id}', 'App\Http\Controllers\UserController@editUsuarios');
    Route::post('calendario', 'App\Http\Controllers\CalendarioController@createCalendario');
+});#Docente-ini
+Route::middleware(['role:Docente'])->group(function(){
+   Route::put('materias', 'App\Http\Controllers\MateriaController@update');
+   Route::post('materias', 'App\Http\Controllers\MateriaController@store');
+   Route::get('materias', 'App\Http\Controllers\MateriaController@index');
 });
+#Docente-fin
