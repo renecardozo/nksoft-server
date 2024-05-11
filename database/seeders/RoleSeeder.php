@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
-class PermissionsSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -36,12 +36,11 @@ class PermissionsSeeder extends Seeder
              'editar-feriados',
              'crear-feriados',
         ];
-
-        foreach ($permissions as $permission) {
-            Permission::create([
-                'name' => $permission,
-                'guard_name' => 'api'
-            ]);
-        }
+       $role= Role::create([
+            'name' => 'SuperAdmin',
+            'guard_name'=>'api',
+            'state'=>true,
+        ]);
+        $role->syncPermissions($permissions);
     }
 }

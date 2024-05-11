@@ -14,15 +14,15 @@ class EventController extends Controller
    return $data;
   }
   public function get()
-{
-    try {
-        // Obtener todos los eventos ordenados por el más reciente
-        $data = Event::get();
-        return response()->json($data, 200);
-    } catch (\Throwable $th) {
-        return response()->json(['error' =>  $th->getMessage()], 500);
-    }
-}
+  {
+      try {
+          // Obtener todos los eventos ordenados por el más reciente
+          $data = Event::get();
+          return response()->json($data, 200);
+      } catch (\Throwable $th) {
+          return response()->json(['error' =>  $th->getMessage()], 500);
+      }
+  }
 
 
    //guardar evennto y vlidacion
