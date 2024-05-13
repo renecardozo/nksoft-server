@@ -44,15 +44,15 @@ class RoleSeeder extends Seeder
         ]);
         $role->syncPermissions($permissions);
         $user= User::create([
-            'name' => 'Edgar',
-            'email'=>'edgar@gmail.com',
-            'password'=>'12345678',
-            'last_name'=>'alachi',
+            'name' => 'Topo',
+            'email'=>'barthg.simpson@mail.ogt',
+            'password'=>'1234567',
+            'last_name'=>'gigio',
             'ci'=>'987654321',
             'code_sis'=>'201807550',
             'phone'=>'234324232',
             
         ]);
-        $$user->assignRole('SuperAdmin');
+        $user->assignRole('SuperAdmin');
     }
 }

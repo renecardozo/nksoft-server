@@ -82,6 +82,15 @@ Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
+
+//solicitudes
+
+Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
+Route::put('solicitud/{id}', 'App\Http\Controllers\SolicitudController@stateRequest');
+Route::get('solicitud/{id}', 'App\Http\Controllers\SolicitudController@show');
+Route::post('filtro', 'App\Http\Controllers\SolicitudController@filter');
+
+
 Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
    Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
