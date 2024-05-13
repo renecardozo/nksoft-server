@@ -108,5 +108,21 @@ class AulaController extends Controller
         return response()->json(['error' => 'Error al deshabilitar el aula: ' . $e->getMessage()], 500);
     }
 }
+public function habilitar(Request $request, $id)
+{
+    $aula = Aula::find($id);
+    if (!$aula) {
+        return response()->json(['message' => 'Aula no encontrada'], 404);
+    }
 
+    $inhabilitado = Inhabilitado::where('aula_id', $aula->id)->first();
+
+    if (!$inhabilitado) {
+        Inhabilitado::create(['aula_id' => $aula->id, 'fecha' => now()]);
+    } else {
+        $inhabilitado->delete();
+    }
+
+    return response()->json(['message' => 'Estado del aula actualizado correctamente']);
+}
 }

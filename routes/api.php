@@ -82,7 +82,29 @@ Route::post('/aulas/post', 'App\Http\Controllers\AulaController@postAula');
 Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
+Route::get('/periodos', 'App\Http\Controllers\PeriodoController@index');
+Route::put('/aulas/{id}/habilitar', 'App\Http\Controllers\AulaController@habilitar');
+Route::get('/inhabilitados/aulas', 'App\Http\Controllers\InhabilitadoController@getAulasInhabilitadas');
+
 //habilitacion
 Route::post('/aulas/{id}/deshabilitar', 'App\Http\Controllers\AulaController@deshabilitarAula');
 
-;
+//eliminacion de un ; innecesario
+Route::middleware(['role:SuperAdmin'])->group(function(){
+   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
+   Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
+   Route::delete('usuarios/{id}', 'App\Http\Controllers\UserController@deleteUsuarios');
+   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias'); 
+   Route::put('materias/{id}', 'App\Http\Controllers\MateriaController@editMaterias');
+   Route::post('roles', 'App\Http\Controllers\RolController@createRoles');
+   Route::delete('calendario/{id}', 'App\Http\Controllers\CalendarioController@deleteCalendario');
+   Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
+   Route::delete('feriados/{id}', 'App\Http\Controllers\FeriadoController@deleteFeriados');
+   Route::post('usuarios', 'App\Http\Controllers\UserController@createUsuarios');
+   Route::put('roles/{id}', 'App\Http\Controllers\RolController@editRoles');
+   Route::delete('materias/{id}', 'App\Http\Controllers\MateriaController@deleteMaterias');
+   Route::delete('roles/{id}', 'App\Http\Controllers\RolController@deleteRoles');
+   Route::put('usuarios/{id}', 'App\Http\Controllers\UserController@editUsuarios');
+   Route::post('calendario', 'App\Http\Controllers\CalendarioController@createCalendario');
+});
+
