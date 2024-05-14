@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Inhabilitado extends Model
 {
     use HasFactory;
-    protected $fillable = ['aula_id','periodo_id','fecha'];
+    protected $fillable = ['aula_id','fecha'];
 
     public function aula()
     {
@@ -18,5 +18,9 @@ class Inhabilitado extends Model
     public function periodo()
     {
         return $this->belongsTo(Periodo::class);
+    }
+    public function setFechaAttribute($value)
+    {
+        $this->attributes['fecha'] = $value ?: now();
     }
 }

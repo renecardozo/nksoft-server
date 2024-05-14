@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class PeriodoController extends Controller
 {
+    public function index()
+    {
+        $periodos = Periodo::all();
+
+        return response()->json($periodos);
+    }
     public function horaApertura()
     {
         // Obtener las horas de apertura para los primeros 7 periodos

@@ -26,6 +26,9 @@ class SolicitudReservaAulaResource extends JsonResource
             "fecha_hora_reserva" => Carbon::parse($this->fecha_hora_reserva)->format('m-d-Y H:i:s'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            "id_aula"=> $this->id_aula,
+            "id_user"=> $this->id_user,
+            "estado"=> $this->estado
         ];
     }
 }

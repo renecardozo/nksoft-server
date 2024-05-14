@@ -15,32 +15,27 @@ class PermissionsSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'actualizar-aula',
-            'registrar-aula',
-            'actualizar-unidad',
-            'crear-unidad',
-            'crear-departamentos',
-            'actualizar-materias',
-            'registrar-materias',
-            'obtener-materias',
-            'eliminar-roles',
-            'editar-roles',
-            'crear-roles',
-            'eliminar-usuarios',
-            'editar-usuarios',
-            'crear-usuarios',
-            'eliminar-calendario',
-            'editar-calendario',
+            'crear-feriados',
+            'editar-feriados',
+            'eliminar-feriados',
             'crear-calendario',
-             'eliminar-feriados',
-             'editar-feriados',
-             'crear-feriados',
+            'editar-calendario',
+            'eliminar-calendario',
+            'crear-usuarios',
+            'editar-usuarios',
+            'eliminar-usuarios',
+            'crear-roles',
+            'editar-roles',
+            'eliminar-roles',
+            'crear-materias',
+            'editar-materias',
+            'eliminar-materias',
         ];
 
         foreach ($permissions as $permission) {
             Permission::create([
                 'name' => $permission,
-                'guard_name' => 'api'
+                'guard_name' => 'api' 
             ]);
         }
     }
