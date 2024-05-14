@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Solicitud;
+use App\Models\SolicitudReservaAula;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -12,7 +13,9 @@ class SolicitudController extends Controller
     public function index()
     {
         try {
-            $requests = Solicitud::orderBy('created_at', 'asc')->get();
+            $requests = SolicitudReservaAula::orderBy('created_at', 'asc')
+                        ->with('materia','periodos')
+                        ->get();
             return response()->json([
                 'success' => true,
                 'data' => $requests
@@ -28,7 +31,7 @@ class SolicitudController extends Controller
     {
         try {
             if ($body->value === 'llegada') {
-                $requests = Solicitud::orderBy('created_at', 'desc')->get();
+                $requests = SolicitudReservaAula::orderBy('created_at', 'desc')->get();
                 return response()->json([
                     'success' => true,
                     'data' => $requests,
@@ -37,9 +40,8 @@ class SolicitudController extends Controller
             if ($body->value  == 'urgencia') {
                 $currentDate = Carbon::now()->toDateString();
 
-                // Obtener todas las solicitudes de la fecha actual
-                $requests = Solicitud::whereDate('created_at', $currentDate)
-                    ->orderBy('created_at', 'asc')
+                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDate)
+                    ->orderBy('fecha_hora_reserva', 'asc')
                     ->get();
                 return response()->json([
                     'success' => true,

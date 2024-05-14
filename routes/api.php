@@ -56,7 +56,6 @@ Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
-
 Route::get('/users',  'App\Http\Controllers\UserController@index');
 Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
 Route::post('/users', 'App\Http\Controllers\UserController@store');
@@ -90,6 +89,13 @@ Route::put('solicitud/{id}', 'App\Http\Controllers\SolicitudController@stateRequ
 Route::get('solicitud/{id}', 'App\Http\Controllers\SolicitudController@show');
 Route::post('filtro', 'App\Http\Controllers\SolicitudController@filter');
 
+//Solicitud Reserva Aula
+Route::get('/solicitud_reserva_aula',  'App\Http\Controllers\SolicitudReservaAulaController@index');
+Route::get('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@getById');
+Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAulaController@store');
+Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
+Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
+
 
 Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
@@ -107,10 +113,13 @@ Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::delete('roles/{id}', 'App\Http\Controllers\RolController@deleteRoles');
    Route::put('usuarios/{id}', 'App\Http\Controllers\UserController@editUsuarios');
    Route::post('calendario', 'App\Http\Controllers\CalendarioController@createCalendario');
-});#Docente-ini
+});
+#Docente-ini
 Route::middleware(['role:Docente'])->group(function(){
    Route::put('materias', 'App\Http\Controllers\MateriaController@update');
    Route::post('materias', 'App\Http\Controllers\MateriaController@store');
    Route::get('materias', 'App\Http\Controllers\MateriaController@index');
 });
 #Docente-fin
+
+
