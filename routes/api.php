@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
 
@@ -51,7 +52,8 @@ Route::prefix('v1/event')->group(function(){
    Route::delete('/{id}',[ EventController::class, 'delete'] );
 });
 
-
+Route::post('/login', [ AuthController::class, 'login']);
+Route::post('/admin', [ AuthController::class, 'admin']);
 //Roles y permisos
 Route::get('/roles', 'App\Http\Controllers\RoleController@index');
 Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
