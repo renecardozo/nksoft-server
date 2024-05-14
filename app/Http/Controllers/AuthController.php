@@ -31,10 +31,25 @@ class AuthController extends Controller
             return response()->json(['error' => true, 'message' => 'User not found'], 404);
         }
         // Authentication passed...
-        return response()->json(new UserResource(User::find($id)));
+        $userRes = new UserResource(User::find($id));
+        $rol = [
+            "name"=>($userRes->getRoleNames())[0],
+        ];
+        $userReturn = [
+            "id" => 2,
+            "name" =>$userRes->name ,
+            "email" => $userRes->email,
+            "last_name" => $userRes->last_name,
+            "ci" => $userRes->ci,
+            "code_sis" => $userRes->code_sis,
+            "phone" => $userRes->phone,
+            'role' => $rol,
+            'permissions' => $userRes->getAllPermissions()->toArray()
+        ];
+        return response()->json($userReturn);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -52,7 +67,22 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         // Authentication passed...
-        return response()->json(new UserResource(User::find($user['id'])));
+        $userRes = new UserResource(User::find($user['id']));
+        $rol = [
+            "name"=>($userRes->getRoleNames())[0],
+        ];
+        $userReturn = [
+            "id" => 2,
+            "name" =>$userRes->name ,
+            "email" => $userRes->email,
+            "last_name" => $userRes->last_name,
+            "ci" => $userRes->ci,
+            "code_sis" => $userRes->code_sis,
+            "phone" => $userRes->phone,
+            'role' => $rol,
+            'permissions' => $userRes->getAllPermissions()->toArray()
+        ];
+        return response()->json($userReturn);
+        
     }
-
 }
