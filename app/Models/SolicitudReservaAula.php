@@ -28,5 +28,9 @@ class SolicitudReservaAula extends Model
     {
         return $this->belongsTo(Periodo::class, 'id_horario');
     }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 
 }

@@ -13,7 +13,7 @@ class SolicitudController extends Controller
     {
         try {
             $requests = SolicitudReservaAula::orderBy('created_at', 'asc')
-                        ->with('materia','periodos')
+                        ->with('materia','periodos','users')
                         ->get();
             return response()->json([
                 'success' => true,
@@ -30,7 +30,9 @@ class SolicitudController extends Controller
     {
         try {
             if ($body->value === 'llegada') {
-                $requests = SolicitudReservaAula::orderBy('created_at', 'desc')->get();
+                $requests = SolicitudReservaAula::orderBy('created_at', 'desc')
+                            ->with('materia','periodos','users')
+                            ->get();
                 return response()->json([
                     'success' => true,
                     'data' => $requests,
@@ -41,6 +43,7 @@ class SolicitudController extends Controller
 
                 $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDate)
                     ->orderBy('fecha_hora_reserva', 'asc')
+                    ->with('materia','periodos','users')
                     ->get();
                 return response()->json([
                     'success' => true,
