@@ -133,3 +133,9 @@ Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAul
 Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
 
+#doc-ini
+Route::middleware(['role:doc'])->group(function(){
+   Route::post('/roles', 'App\Http\Controllers\RolController@createRoles');
+   Route::post('/roles/{id}', 'App\Http\Controllers\RolController@editRoles');
+});
+#doc-fin
