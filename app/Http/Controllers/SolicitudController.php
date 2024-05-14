@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Solicitud;
 use App\Models\SolicitudReservaAula;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -60,8 +59,8 @@ class SolicitudController extends Controller
     {
 
         try {
-            $solicitud = Solicitud::find($id);
-            $solicitud->state = $body->value;
+            $solicitud = SolicitudReservaAula::find($id);
+            $solicitud->estado = $body->value;
             $solicitud->update();
             return response()->json([
                 'success' => true,
@@ -74,20 +73,10 @@ class SolicitudController extends Controller
             ], 500);
         }
     }
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
     public function show($id)
     {
         try {
-            $solicitud = Solicitud::find($id);
+            $solicitud = SolicitudReservaAula::find($id);
             return response()->json([
                 'success' => true,
                 'data' => $solicitud
@@ -100,18 +89,5 @@ class SolicitudController extends Controller
         }
     }
 
-    public function edit(Solicitud $solicitud)
-    {
-        //
-    }
 
-    public function update(Request $request, Solicitud $solicitud)
-    {
-        //
-    }
-
-    public function destroy(Solicitud $solicitud)
-    {
-        //
-    }
 }
