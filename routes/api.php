@@ -89,6 +89,15 @@ Route::post('/aulas/post', 'App\Http\Controllers\AulaController@postAula');
 Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
+
+//solicitudes
+
+Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
+Route::put('solicitud/{id}', 'App\Http\Controllers\SolicitudController@stateRequest');
+Route::get('solicitud/{id}', 'App\Http\Controllers\SolicitudController@show');
+Route::post('filtro', 'App\Http\Controllers\SolicitudController@filter');
+
+
 Route::get('/periodos', 'App\Http\Controllers\PeriodoController@index');
 Route::put('/aulas/{id}/habilitar', 'App\Http\Controllers\AulaController@habilitar');
 Route::get('/inhabilitados/aulas', 'App\Http\Controllers\InhabilitadoController@getAulasInhabilitadas');
@@ -114,6 +123,8 @@ Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::put('usuarios/{id}', 'App\Http\Controllers\UserController@editUsuarios');
    Route::post('calendario', 'App\Http\Controllers\CalendarioController@createCalendario');
 });
+
+
 
 //Solicitud Reserva Aula
 Route::get('/solicitud_reserva_aula',  'App\Http\Controllers\SolicitudReservaAulaController@index');

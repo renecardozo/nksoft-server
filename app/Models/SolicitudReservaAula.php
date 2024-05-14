@@ -19,5 +19,14 @@ class SolicitudReservaAula extends Model
         "id_user",
         "estado"
     ];
+    public function materia()
+    {
+        return $this->belongsTo(Materia::class, 'id_materia');
+    }
+
+    public function periodos()
+    {
+        return $this->belongsTo(Periodo::class, 'id_horario');
+    }
 
 }
