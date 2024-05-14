@@ -39,7 +39,6 @@ return [
             'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
-            'level' => 'debug'
         ],
 
         'single' => [

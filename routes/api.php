@@ -8,7 +8,6 @@ use App\Http\Controllers\UserController;
 use APP\Http\Controllers\API\MateriaController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
-use App\Http\Controllers\AuthController;
 
 
 /*
@@ -26,14 +25,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::prefix('v1/materias')->group(function () {
+    Route::get('/',[ MateriaController::class, 'get']);
+    Route::post('/',[ MateriaController::class, 'store']);
+    Route::get('/{id}',[ MateriaController::class, 'getById']);
+    Route::put('/{id}',[ MateriaController::class, 'update']);
+    Route::delete('/{id}',[ MateriaController::class, 'delete']);
+});
 
 Route::get('/materias', 'App\Http\Controllers\API\MateriaController@index');
 Route::post('/materias', 'App\Http\Controllers\API\MateriaController@store');
-Route::post('/materias2', 'App\Http\Controllers\API\MateriaController@guardar');
-Route::post('/materiasDuplicado', 'App\Http\Controllers\API\MateriaController@verificar'); 
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
+
+Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
+Route::post('/docentes', 'App\Http\Controllers\DocenteController@store');
+Route::put('/docentes', 'App\Http\Controllers\DocenteController@update');
+Route::delete('/docentes/{id}', 'App\Http\Controllers\DocenteController@destroy');
 
 Route::prefix('v1/event')->group(function(){
    Route::get('/',[ EventController::class, 'get'] );
@@ -43,8 +51,7 @@ Route::prefix('v1/event')->group(function(){
    Route::delete('/{id}',[ EventController::class, 'delete'] );
 });
 
-Route::post('/login', [ AuthController::class, 'login']);
-Route::post('/admin', [ AuthController::class, 'admin']);
+
 //Roles y permisos
 Route::get('/roles', 'App\Http\Controllers\RoleController@index');
 Route::get('/permissions', 'App\Http\Controllers\RoleController@getPermissions');
@@ -56,11 +63,13 @@ Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
+
 Route::get('/users',  'App\Http\Controllers\UserController@index');
 Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
 Route::post('/users', 'App\Http\Controllers\UserController@store');
 Route::delete('/users/{id}', 'App\Http\Controllers\UserController@destroy');
 Route::post('/users/{id}', 'App\Http\Controllers\UserController@update');
+
 
 
 //Unidades
@@ -78,14 +87,21 @@ Route::get('/aulas/mostrar','App\Http\Controllers\AulaController@mostrarAula');
 Route::get('/aulas/mostrarId/{unidadId}', 'App\Http\Controllers\AulaController@mostrarAulaPorUnidad');
 Route::post('/aulas/post', 'App\Http\Controllers\AulaController@postAula');
 Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
-
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
+Route::get('/periodos', 'App\Http\Controllers\PeriodoController@index');
+Route::put('/aulas/{id}/habilitar', 'App\Http\Controllers\AulaController@habilitar');
+Route::get('/inhabilitados/aulas', 'App\Http\Controllers\InhabilitadoController@getAulasInhabilitadas');
+
+//habilitacion
+Route::post('/aulas/{id}/deshabilitar', 'App\Http\Controllers\AulaController@deshabilitarAula');
+
+//eliminacion de un ; innecesario
 Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
    Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
    Route::delete('usuarios/{id}', 'App\Http\Controllers\UserController@deleteUsuarios');
-   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias');
+   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias'); 
    Route::put('materias/{id}', 'App\Http\Controllers\MateriaController@editMaterias');
    Route::post('roles', 'App\Http\Controllers\RolController@createRoles');
    Route::delete('calendario/{id}', 'App\Http\Controllers\CalendarioController@deleteCalendario');
@@ -105,3 +121,4 @@ Route::get('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReserv
 Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAulaController@store');
 Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
+
