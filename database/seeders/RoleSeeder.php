@@ -16,42 +16,37 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'actualizar-aula',
-            'registrar-aula',
-            'actualizar-unidad',
-            'crear-unidad',
-            'crear-departamentos',
-            'actualizar-materias',
-            'registrar-materias',
-            'obtener-materias',
-            'eliminar-roles',
-            'editar-roles',
-            'crear-roles',
-            'eliminar-usuarios',
-            'editar-usuarios',
-            'crear-usuarios',
-            'eliminar-calendario',
-            'editar-calendario',
+            'crear-feriados',
+            'editar-feriados',
+            'eliminar-feriados',
             'crear-calendario',
-             'eliminar-feriados',
-             'editar-feriados',
-             'crear-feriados',
+            'editar-calendario',
+            'eliminar-calendario',
+            'crear-usuarios',
+            'editar-usuarios',
+            'eliminar-usuarios',
+            'crear-roles',
+            'editar-roles',
+            'eliminar-roles',
+            'crear-materias',
+            'editar-materias',
+            'eliminar-materias',
         ];
-       $role= Role::create([
+        $role = Role::create([
             'name' => 'SuperAdmin',
-            'guard_name'=>'api',
-            'state'=>true,
+            'guard_name' => 'api',
+            'state' => true,
         ]);
         $role->syncPermissions($permissions);
-        $user= User::create([
+        $user = User::create([
             'name' => 'Topo',
-            'email'=>'barthg.simpson@mail.ogt',
-            'password'=>'1234567',
-            'last_name'=>'gigio',
-            'ci'=>'987654321',
-            'code_sis'=>'201807550',
-            'phone'=>'234324232',
-            
+            'email' => 'barthg.simpson@mail.ogt',
+            'password' => '1234567',
+            'last_name' => 'gigio',
+            'ci' => '987654321',
+            'code_sis' => '201807550',
+            'phone' => '234324232',
+
         ]);
         $user->assignRole('SuperAdmin');
     }
