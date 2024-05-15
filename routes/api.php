@@ -70,7 +70,7 @@ Route::get('/users',  'App\Http\Controllers\UserController@index');
 Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
 Route::post('/users', 'App\Http\Controllers\UserController@store');
 Route::delete('/users/{id}', 'App\Http\Controllers\UserController@destroy');
-Route::post('/users/{id}', 'App\Http\Controllers\UserController@update');
+Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
 
 
 

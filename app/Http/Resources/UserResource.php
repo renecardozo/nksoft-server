@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'role' => $this->roles()->get(['name', 'id'])->first(),
             'role_id' => @$this->roles->first()->id,
+            'permissions'=> $this->getPermissionsViaRoles(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
