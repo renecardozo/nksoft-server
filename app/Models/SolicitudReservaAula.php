@@ -17,7 +17,9 @@ class SolicitudReservaAula extends Model
         "fecha_hora_reserva",
         "id_aula",
         "id_user",
-        "estado"
+        "estado",
+        "cantidad_estudiantes",
+        "observaciones"
     ];
     public function materia()
     {

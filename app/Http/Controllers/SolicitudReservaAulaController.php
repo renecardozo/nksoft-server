@@ -27,18 +27,15 @@ class SolicitudReservaAulaController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
         $validator = Validator::make($request->all(), [
            // "id_solicitud" => "optional",
             "fecha_solicitud" => "required",
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
             "id_horario" => "required|exists:periodos,id",
-            "aula" => "required",
             "fecha_hora_reserva" => "required",
             "id_aula"=> "required|exists:aulas,id",
             "id_user"=> "required|exists:users,id",
-            "estado"=> "optional"
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al crear solicitud', 'error' => $validator->errors()], 400);
@@ -78,11 +75,10 @@ class SolicitudReservaAulaController extends Controller
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
             "id_horario" => "required|exists:periodos,id",
-            "aula" => "required",
             "fecha_hora_reserva" => "required",
             "id_aula"=> "required|exists:aulas,id",
             "id_user"=> "required|exists:users,id",
-            "estado"=> "optional"
+            
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al actualizar solicitud', 'error' => $validator->errors()], 400);
