@@ -136,4 +136,19 @@ class UserController extends Controller
         User::find($id)->delete();
         return response()->json(['success' => true, 'message' => 'Usuario eliminado exitosamente'], 201);
     }
+    public function showDocentes()
+{
+    // Busca el rol con nombre 'docente'
+    $roleDocente = Role::where('name', 'Docente')->first();
+
+    if (!$roleDocente) {
+        return response()->json(['error' => true, 'message' => 'Role "Docente" not found'], 404);
+    }
+
+    // Obtén los usuarios que tienen el rol 'docente'
+    $usuariosDocentes = User::role($roleDocente->name)->get();
+
+    return response()->json(UserResource::collection($usuariosDocentes));
+}
+
 }
