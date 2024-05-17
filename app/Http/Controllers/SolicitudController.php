@@ -6,6 +6,7 @@ use App\Models\SolicitudReservaAula;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SolicitudController extends Controller
 {
@@ -13,8 +14,8 @@ class SolicitudController extends Controller
     {
         try {
             $requests = SolicitudReservaAula::orderBy('created_at', 'asc')
-                        ->with('materia','periodos','users')
-                        ->get();
+                ->with('materia', 'periodos', 'users')
+                ->get();
             return response()->json([
                 'success' => true,
                 'data' => $requests
@@ -31,8 +32,8 @@ class SolicitudController extends Controller
         try {
             if ($body->value === 'llegada') {
                 $requests = SolicitudReservaAula::orderBy('created_at', 'desc')
-                            ->with('materia','periodos','users')
-                            ->get();
+                    ->with('materia', 'periodos', 'users')
+                    ->get();
                 return response()->json([
                     'success' => true,
                     'data' => $requests,
@@ -43,11 +44,26 @@ class SolicitudController extends Controller
 
                 $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDate)
                     ->orderBy('fecha_hora_reserva', 'asc')
-                    ->with('materia','periodos','users')
+                    ->with('materia', 'periodos', 'users')
                     ->get();
                 return response()->json([
                     'success' => true,
                     'data' => $requests,
+                ]);
+            }
+            if ($body->value  == 'motivo') {
+                // $currentDate = Carbon::now()->toDateString();
+
+                $requests = SolicitudReservaAula::get();
+                $sortedRequests = $requests->sortBy(function ($request) {
+                    $order = ['Conferencia', 'Examen', 'Reunión', 'Clases'];
+                    return array_search($request->motivo_reserva, $order);
+                });
+                $sortedRequests->load('materia', 'periodos', 'users');
+
+                return response()->json([
+                    'success' => true,
+                    'data' => $sortedRequests,
                 ]);
             }
         } catch (QueryException $e) {
@@ -91,6 +107,4 @@ class SolicitudController extends Controller
             ], 500);
         }
     }
-
-
 }
