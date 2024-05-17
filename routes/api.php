@@ -70,7 +70,7 @@ Route::get('/users',  'App\Http\Controllers\UserController@index');
 Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
 Route::post('/users', 'App\Http\Controllers\UserController@store');
 Route::delete('/users/{id}', 'App\Http\Controllers\UserController@destroy');
-Route::post('/users/{id}', 'App\Http\Controllers\UserController@update');
+Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
 
 
 
@@ -142,6 +142,14 @@ Route::middleware(['role:docente'])->group(function(){
    Route::delete('feriados/{id}', 'App\Http\Controllers\FeriadoController@deleteFeriados');
 });
 #docente-fin
+
+//Docente Materia
+Route::get('/docente_materia',  'App\Http\Controllers\DocenteMateriaController@index');
+Route::get('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@getById');
+Route::post('/docente_materia', 'App\Http\Controllers\DocenteMateriaController@store');
+Route::delete('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@destroy');
+Route::put('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@update');
+
 #Auxiliar-ini
 Route::middleware(['role:Auxiliar'])->group(function(){
    Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');

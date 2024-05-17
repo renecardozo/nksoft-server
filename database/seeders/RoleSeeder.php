@@ -16,21 +16,28 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $permissions = [
+            'visualizar-feriados',
             'crear-feriados',
             'editar-feriados',
             'eliminar-feriados',
-            'crear-calendario',
-            'editar-calendario',
-            'eliminar-calendario',
+            'visualizar-calendario',
+            'visualizar-usuarios',
             'crear-usuarios',
             'editar-usuarios',
             'eliminar-usuarios',
+            'visualizar-roles',
             'crear-roles',
             'editar-roles',
             'eliminar-roles',
+            'visualizar-materias',
             'crear-materias',
-            'editar-materias',
-            'eliminar-materias',
+            'visualizar-reserva',
+            'crear-reserva',
+            'editar-reserva',
+            'eliminar-reserva',
+            'gestionar-docente',
+            'gestionar-solicitudes',
+            'buscar-aulas'
         ];
         $role = Role::create([
             'name' => 'SuperAdmin',
