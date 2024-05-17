@@ -14,12 +14,38 @@ class MateriaController extends Controller
     public function store(Request $request)
     {
         $materia = new Materia();
+        $materia->id_materia = $request->id_materia;
         $materia->codigo = $request->codigo;
         $materia->materia = $request->materia;
         $materia->grupo = $request->grupo;
         $materia->departamento = $request->departamento;
         $materia->save();
     }
+
+    public function crearMateria(Request $request)
+    {
+        $materia = new Materia();
+        $materia->id_materia = $request->id_materia;
+        $materia->codigo = $request->codigo;
+        $materia->materia = $request->materia;
+        $materia->grupo = $request->grupo;
+        $materia->departamento = $request->departamento;
+        $materia->save();
+    }
+
+    public function guardar(Request $request)
+    {
+        $materia = new Materia();
+        $materia->id_materia = $request->id_materia;
+        $materia->codigo = $request->codigo;
+        $materia->materia = $request->materia;
+        $materia->grupo = $request->grupo;
+        $materia->docente = $request->docente;
+        $materia->departamento = $request->departamento;
+        $materia->save();
+    }
+
+
 
     public function index()
     {
@@ -39,6 +65,7 @@ class MateriaController extends Controller
 
     public function create(Request $request){
         try{
+            $data['id_materia']=$request['id_materia'];
             $data['codigo']=$request['codigo'];
             $data['materia']=$request['materia'];
             $data['grupo']=$request['grupo'];
@@ -49,6 +76,20 @@ class MateriaController extends Controller
             return response()->json(['error' => $th -> getMessage()],500);
         }
     }
+
+    public function verificar(Request $request)
+    {
+        
+        $materia = $request->input('materia');
+        $grupo = $request->input('grupo');
+
+        $duplicados = Materia::where('materia', $materia)
+                             ->where('grupo', $grupo)
+                             ->exists();
+
+        return response()->json(['duplicados' => $duplicados]);
+    }
+
 
     public function getById($id){
         try{
@@ -61,6 +102,7 @@ class MateriaController extends Controller
 
     public function update(Request $request, $id){
         try{
+            $data['id_materia']=$request['id_materia'];
             $data['codigo']=$request['codigo'];
             $data['materia']=$request['materia'];
             $data['grupo']=$request['grupo'];

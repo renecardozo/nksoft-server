@@ -16,8 +16,10 @@ class CreateMateriaTable extends Migration
         Schema::create('materia', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('id_materia');
             $table->integer('codigo');
             $table->string('materia');
+            $table->string('docente');
             $table->string('grupo');
             $table->string('departamento');
         });
