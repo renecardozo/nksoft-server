@@ -18,8 +18,7 @@ class AddFieldsToUsersTable extends Migration
             $table->string('ci')->nullable();
             $table->string('code_sis')->nullable();
             $table->string('phone')->nullable();
-            //$table->integer('role_id')->unsigned();            
-           // $table->foreign('role_id')->references('id')->on('roles');
+            $table->unsignedBigInteger('role_id')->nullable();           
         });
         //DB::update('alter table `inventories` modify `sku` VARCHAR(200) UNIQUE NOT NULL');
     }

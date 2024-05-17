@@ -64,12 +64,11 @@ Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 //Usuarios
 
 Route::get('/users',  'App\Http\Controllers\UserController@index');
+Route::get('/users/docentes', 'App\Http\Controllers\UserController@showDocentes'); // Devuelve usuarios con rol de docente
 Route::get('/users/{id}', 'App\Http\Controllers\UserController@getById');
 Route::post('/users', 'App\Http\Controllers\UserController@store');
 Route::delete('/users/{id}', 'App\Http\Controllers\UserController@destroy');
 Route::put('/users/{id}', 'App\Http\Controllers\UserController@update');
-
-
 
 //Unidades
 Route::post('/departamentos', 'App\Http\Controllers\DepartamentoController@registrarDepartamento');
@@ -123,8 +122,6 @@ Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::post('calendario', 'App\Http\Controllers\CalendarioController@createCalendario');
 });
 
-
-
 //Solicitud Reserva Aula
 Route::get('/solicitud_reserva_aula',  'App\Http\Controllers\SolicitudReservaAulaController@index');
 Route::get('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@getById');
@@ -132,3 +129,24 @@ Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAul
 Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
 
+#docente-ini
+Route::middleware(['role:docente'])->group(function(){
+   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
+   Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
+   Route::delete('feriados/{id}', 'App\Http\Controllers\FeriadoController@deleteFeriados');
+});
+#docente-fin
+
+//Docente Materia
+Route::get('/docente_materia',  'App\Http\Controllers\DocenteMateriaController@index');
+Route::get('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@getById');
+Route::post('/docente_materia', 'App\Http\Controllers\DocenteMateriaController@store');
+Route::delete('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@destroy');
+Route::put('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@update');
+
+#Auxiliar-ini
+Route::middleware(['role:Auxiliar'])->group(function(){
+   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
+   Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
+});
+#Auxiliar-fin

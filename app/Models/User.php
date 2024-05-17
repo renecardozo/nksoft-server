@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\DocenteMateria;
 
 class User extends Authenticatable
 {
@@ -39,8 +40,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    /* public function role()
+    public function materias()
     {
-        return $this->belongsTo(Role::class);
-    } */
+        return $this->hasMany(DocenteMateria::class,'docente_id', 'id');
+    }
 }

@@ -162,6 +162,14 @@ class RoleController extends Controller
 
             [
                 'id' => 1,
+                'permission' => 'visualizar-feriados',
+                'controller' => 'FeriadoController',
+                'url' => 'feriados',
+                'method' => 'get',
+                'function' => 'index'
+            ],
+            [
+                'id' => 2,
                 'permission' => 'crear-feriados',
                 'controller' => 'FeriadoController',
                 'url' => 'feriados',
@@ -169,7 +177,7 @@ class RoleController extends Controller
                 'function' => 'createFeriados'
             ],
             [
-                'id' => 2,
+                'id' => 3,
                 'permission' => 'editar-feriados',
                 'controller' => 'FeriadoController',
                 'url' => 'feriados/{id}',
@@ -177,7 +185,7 @@ class RoleController extends Controller
                 'function' => 'editFeriados'
             ],
             [
-                'id' => 3,
+                'id' => 4,
                 'permission' => 'eliminar-feriados',
                 'controller' => 'FeriadoController',
                 'url' => 'feriados/{id}',
@@ -185,28 +193,20 @@ class RoleController extends Controller
                 'function' => 'deleteFeriados'
             ],
             [
-                'id' => 4,
-                'permission' => 'crear-calendario',
+                'id' => 5,
+                'permission' => 'visualizar-calendario',
                 'controller' => 'CalendarioController',
                 'url' => 'calendario',
-                'method' => 'post',
-                'function' => 'createCalendario'
-            ],
-            [
-                'id' => 5,
-                'permission' => 'editar-calendario',
-                'controller' => 'CalendarioController',
-                'url' => 'calendario/{id}',
-                'method' => 'put',
-                'function' => 'editCalendario'
+                'method' => 'get',
+                'function' => 'index'
             ],
             [
                 'id' => 6,
-                'permission' => 'eliminar-calendario',
-                'controller' => 'CalendarioController',
-                'url' => 'calendario/{id}',
-                'method' => 'delete',
-                'function' => 'deleteCalendario'
+                'permission' => 'visualizar-usuarios',
+                'controller' => 'UserController',
+                'url' => 'usuarios',
+                'method' => 'get',
+                'function' => 'index'
             ],
             [
                 'id' => 7,
@@ -234,6 +234,14 @@ class RoleController extends Controller
             ],
             [
                 'id' => 10,
+                'permission' => 'visualizar-roles',
+                'controller' => 'RolController',
+                'url' => '/role',
+                'method' => 'get',
+                'function' => 'index'
+            ],
+            [
+                'id' => 11,
                 'permission' => 'crear-roles',
                 'controller' => 'RolController',
                 'url' => '/roles',
@@ -241,7 +249,7 @@ class RoleController extends Controller
                 'function' => 'createRoles'
             ],
             [
-                'id' => 11,
+                'id' => 12,
                 'permission' => 'editar-roles',
                 'controller' => 'RolController',
                 'url' => '/roles/{id}',
@@ -249,7 +257,7 @@ class RoleController extends Controller
                 'function' => 'editRoles'
             ],
             [
-                'id' => 12,
+                'id' => 13,
                 'permission' => 'eliminar-roles',
                 'controller' => 'RolController',
                 'url' => '/roles/{id}',
@@ -257,69 +265,78 @@ class RoleController extends Controller
                 'function' => 'updateStateRole'
             ],
             [
-                'id' => 13,
-                'permission' => 'obtener-materias',
+                'id' => 14,
+                'permission' => 'visualizar-materias',
                 'controller' => 'MateriaController',
-                'url' => 'materias',
+                'url' => 'materiass',
                 'method' => 'get',
                 'function' => 'index'
             ],
             [
-                'id' => 14,
-                'permission' => 'registrar-materias',
+                'id' => 15,
+                'permission' => 'crear-materias',
                 'controller' => 'MateriaController',
                 'url' => 'materias',
                 'method' => 'post',
                 'function' => 'store'
             ],
             [
-                'id' => 15,
-                'permission' => 'actualizar-materias',
-                'controller' => 'MateriaController',
-                'url' => 'materias',
+                'id' => 16,
+                'permission' => 'visualizar-reserva',
+                'controller' => 'SolicitudReservaAulaController',
+                'url' => '/reservass',
+                'method' => 'get',
+                'function' => 'index'
+            ],
+            [
+                'id' => 17,
+                'permission' => 'crear-reserva',
+                'controller' => 'SolicitudReservaAulaController',
+                'url' => '/reservass',
+                'method' => 'get',
+                'function' => 'post'
+            ],
+            [
+                'id' => 18,
+                'permission' => 'editar-reserva',
+                'controller' => 'SolicitudReservaAulaController',
+                'url' => '/reservass',
                 'method' => 'put',
                 'function' => 'update'
             ],
             [
-                'id' => 16,
-                'permission' => 'crear-departamentos',
-                'controller' => 'DepartamentoController',
-                'url' => '/departamentos',
-                'method' => 'post',
-                'function' => 'registrarDepartamento'
-            ],
-            [
-                'id' => 17,
-                'permission' => 'crear-unidad',
-                'controller' => 'UnidadController',
-                'url' => '/unidades',
-                'method' => 'post',
-                'function' => 'registrarUnidad'
-            ],
-            [
-                'id' => 18,
-                'permission' => 'actualizar-unidad',
-                'controller' => 'UnidadController',
-                'url' => '/unidades/{id}',
-                'method' => 'post',
-                'function' => 'actualizarUnidad'
-            ],
-            [
                 'id' => 19,
-                'permission' => 'registrar-aula',
+                'permission' => 'eliminar-reserva',
+                'controller' => 'SolicitudReservaAulaController',
+                'url' => '/reservass',
+                'method' => 'delete',
+                'function' => 'delete'
+            ],
+            [
+                'id' => 20,
+                'permission' => 'gestionar-docente',
+                'controller' => 'DocenteController',
+                'url' => '/docent',
+                'method' => 'post',
+                'function' => 'index'
+            ],
+            [
+                'id' => 21,
+                'permission' => 'gestionar-solicitudes',
+                'controller' => 'SolicitudController',
+                'url' => '/solicitudes',
+                'method' => 'get',
+                'function' => 'index'
+            ],
+            [
+                'id' => 22,
+                'permission' => 'buscar-aulas',
                 'controller' => 'AulaController',
                 'url' => '/aulas/registrar',
                 'method' => 'post',
                 'function' => 'registrarAula'
             ],
-            [
-                'id' => 20,
-                'permission' => 'actualizar-aula',
-                'controller' => 'AulaController',
-                'url' => '/aulas/{id}',
-                'method' => 'put',
-                'function' => 'registrarAula'
-            ],
+           
 
         ];
         foreach ($pathNames as $path) {
