@@ -150,3 +150,13 @@ Route::middleware(['role:Auxiliar'])->group(function(){
    Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
 });
 #Auxiliar-fin
+
+#Docente-ini
+Route::middleware(['role:Docente'])->group(function(){
+   Route::get('/solicitudes', 'App\Http\Controllers\SolicitudController@index');
+   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@index');
+   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@post');
+   Route::put('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@update');
+   Route::delete('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@delete');
+});
+#Docente-fin
