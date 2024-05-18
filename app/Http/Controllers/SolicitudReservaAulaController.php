@@ -52,7 +52,7 @@ class SolicitudReservaAulaController extends Controller
                 $request->request->add(['id_horario' => $request->id_periodo]);
             }
             if (@$request->fecha_reserva) {
-                $request->request->add(['fecha_hora_reserva' => $request->id_reserva]);
+                $request->request->add(['fecha_hora_reserva' => $request->fecha_reserva]);
             }
             if (!@SolicitudReservaAula::find($request->id_solicitud)) {
                 $data_all = $request->all();
@@ -102,7 +102,7 @@ class SolicitudReservaAulaController extends Controller
                 $request->request->add(['id_horario' => $request->id_periodo]);
             }
             if (@$request->fecha_reserva) {
-                $request->request->add(['fecha_hora_reserva' => $request->id_reserva]);
+                $request->request->add(['fecha_hora_reserva' => $request->fecha_reserva]);
             }
             $data_update = $request->all();
             $solicitud = SolicitudReservaAula::find($id);
