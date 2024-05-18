@@ -40,8 +40,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function materias()
-    {
-        return $this->hasMany(DocenteMateria::class,'docente_id', 'id');
+    // public function materias()
+    // {
+    //     return $this->belongsToMany(DocenteMateria::class,'docente_id', 'id');
+    // }
+    public function materias(){
+        return $this->belongsToMany(Materia::class, 'docente_materia', 'docente_id','materia_id')->withPivot('grupo');
     }
 }
