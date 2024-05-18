@@ -34,8 +34,8 @@ class SolicitudReservaAulaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // "id_solicitud" => "optional",
-            "fecha_solicitud" => "required",
+            // "id_solicitud" => "optional"
+            "fecha_reserva"=>"nullable",
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
             "id_periodo" => "required|exists:periodos,id",
@@ -50,6 +50,9 @@ class SolicitudReservaAulaController extends Controller
             }
             if (@$request->id_periodo) {
                 $request->request->add(['id_horario' => $request->id_periodo]);
+            }
+            if (@$request->fecha_reserva) {
+                $request->request->add(['fecha_hora_reserva' => $request->id_reserva]);
             }
             if (!@SolicitudReservaAula::find($request->id_solicitud)) {
                 $data_all = $request->all();
@@ -82,7 +85,7 @@ class SolicitudReservaAulaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            "fecha_solicitud" => "required",
+            "fecha_reserva"=>"nullable",
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
             "id_periodo" => "required|exists:periodos,id",
@@ -97,6 +100,9 @@ class SolicitudReservaAulaController extends Controller
             }
             if (@$request->id_periodo) {
                 $request->request->add(['id_horario' => $request->id_periodo]);
+            }
+            if (@$request->fecha_reserva) {
+                $request->request->add(['fecha_hora_reserva' => $request->id_reserva]);
             }
             $data_update = $request->all();
             $solicitud = SolicitudReservaAula::find($id);
