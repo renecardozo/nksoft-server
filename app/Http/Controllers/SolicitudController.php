@@ -40,30 +40,49 @@ class SolicitudController extends Controller
                 ]);
             }
             if ($body->value  == 'urgencia') {
-                $currentDate = Carbon::now()->toDateString();
 
-                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDate)
+                $currentDate = Carbon::now('America/La_Paz')->toDateString();
+                $currentDateTime = $currentDate . ' 00:00:00.000';
+
+                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDateTime)
                     ->orderBy('fecha_hora_reserva', 'asc')
                     ->with('materia', 'periodos', 'users')
                     ->get();
+
+                // Verificar si hay registros devueltos
+                if ($requests->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No requests found for the current date',
+                        'fec' => $currentDateTime
+
+                    ]);
+                }
                 return response()->json([
                     'success' => true,
                     'data' => $requests,
                 ]);
             }
             if ($body->value  == 'motivo') {
-                // $currentDate = Carbon::now()->toDateString();
+                $requests = SolicitudReservaAula::with('materia', 'periodos', 'users')->get();
 
-                $requests = SolicitudReservaAula::get();
+                if ($requests->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No requests found',
+                    ]);
+                }
+
                 $sortedRequests = $requests->sortBy(function ($request) {
-                    $order = ['Conferencia', 'Examen', 'Reunión', 'Clases'];
+                    $order = ['Conferencia', 'Examen', 'Reunion', 'Clases'];
                     return array_search($request->motivo_reserva, $order);
-                });
-                $sortedRequests->load('materia', 'periodos', 'users');
+                })->values();
+
+                $sortedRequestsArray = $sortedRequests->toArray();
 
                 return response()->json([
                     'success' => true,
-                    'data' => $sortedRequests,
+                    'data' => $sortedRequestsArray,
                 ]);
             }
         } catch (QueryException $e) {
