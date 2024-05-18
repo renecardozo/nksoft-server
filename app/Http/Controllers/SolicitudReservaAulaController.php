@@ -15,8 +15,14 @@ class SolicitudReservaAulaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if ($request->has('id_user')) {
+            $query = $request->query('id_user');
+            return response()->json(SolicitudReservaAulaResource::collection(SolicitudReservaAula::where('id_user', $query)->get()));
+        }
+        var_dump($request->all());
         return response()->json(SolicitudReservaAulaResource::collection(SolicitudReservaAula::all()));
     }
     /**
@@ -28,23 +34,31 @@ class SolicitudReservaAulaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-           // "id_solicitud" => "optional",
-            "fecha_solicitud" => "required",
+            // "id_solicitud" => "optional"
+            "fecha_reserva"=>"nullable",
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
-            "id_horario" => "required|exists:periodos,id",
-            "fecha_hora_reserva" => "required",
-            "id_aula"=> "required|exists:aulas,id",
-            "id_user"=> "required|exists:users,id",
+            "id_periodo" => "required|exists:periodos,id",
+            "id_aula" => "required|exists:aulas,id",
+            "id_user" => "required|exists:users,id",
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al crear solicitud', 'error' => $validator->errors()], 400);
         } else {
+            if (!@$request->estado) {
+                $request->request->add(['estado' => 'pendiente']);;
+            }
+            if (@$request->id_periodo) {
+                $request->request->add(['id_horario' => $request->id_periodo]);
+            }
+            if (@$request->fecha_reserva) {
+                $request->request->add(['fecha_hora_reserva' => $request->id_reserva]);
+            }
             if (!@SolicitudReservaAula::find($request->id_solicitud)) {
                 $data_all = $request->all();
                 SolicitudReservaAula::create($data_all);
                 return response()->json(['success' => true, 'message' => 'Solicitud creada exitosamente'], 201);
-            }else{
+            } else {
                 $data_update = $request->except('id_solicitud');
                 $solicitud = SolicitudReservaAula::find($request->id_solicitud);
                 $solicitud->update($data_update);
@@ -71,18 +85,25 @@ class SolicitudReservaAulaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            "fecha_solicitud" => "required",
+            "fecha_reserva"=>"nullable",
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
-            "id_horario" => "required|exists:periodos,id",
-            "fecha_hora_reserva" => "required",
-            "id_aula"=> "required|exists:aulas,id",
-            "id_user"=> "required|exists:users,id",
-            
+            "id_periodo" => "required|exists:periodos,id",
+            "id_aula" => "required|exists:aulas,id",
+            "id_user" => "required|exists:users,id",
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al actualizar solicitud', 'error' => $validator->errors()], 400);
         } else {
+            if (!@$request->estado) {
+                $request->request->add(['estado' => 'pendiente']);;
+            }
+            if (@$request->id_periodo) {
+                $request->request->add(['id_horario' => $request->id_periodo]);
+            }
+            if (@$request->fecha_reserva) {
+                $request->request->add(['fecha_hora_reserva' => $request->id_reserva]);
+            }
             $data_update = $request->all();
             $solicitud = SolicitudReservaAula::find($id);
             $solicitud->update($data_update);
