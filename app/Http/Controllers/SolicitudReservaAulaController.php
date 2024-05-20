@@ -22,7 +22,6 @@ class SolicitudReservaAulaController extends Controller
             $query = $request->query('id_user');
             return response()->json(SolicitudReservaAulaResource::collection(SolicitudReservaAula::where('id_user', $query)->get()));
         }
-        var_dump($request->all());
         return response()->json(SolicitudReservaAulaResource::collection(SolicitudReservaAula::all()));
     }
     /**
@@ -38,7 +37,7 @@ class SolicitudReservaAulaController extends Controller
             "fecha_reserva"=>"nullable",
             "motivo_reserva" => "required",
             "id_materia" => "required|exists:materia,id",
-            "id_periodo" => "required|exists:periodos,id",
+            "periodos" => "required",
             "id_aula" => "required|exists:aulas,id",
             "id_user" => "required|exists:users,id",
         ]);
@@ -48,20 +47,20 @@ class SolicitudReservaAulaController extends Controller
             if (!@$request->estado) {
                 $request->request->add(['estado' => 'pendiente']);;
             }
-            if (@$request->id_periodo) {
-                $request->request->add(['id_horario' => $request->id_periodo]);
-            }
             if (@$request->fecha_reserva) {
                 $request->request->add(['fecha_hora_reserva' => $request->fecha_reserva]);
             }
-            if (!@SolicitudReservaAula::find($request->id_solicitud)) {
+           
+            if (!@$request->id_solicitud) {
                 $data_all = $request->all();
-                SolicitudReservaAula::create($data_all);
+                $solicitud = SolicitudReservaAula::create($data_all);
+                $solicitud->periodos()->attach($request->periodos);
                 return response()->json(['success' => true, 'message' => 'Solicitud creada exitosamente'], 201);
             } else {
+                $solicitud_reserva_aula = SolicitudReservaAula::findOrFail($request->id_solicitud);
                 $data_update = $request->except('id_solicitud');
-                $solicitud = SolicitudReservaAula::find($request->id_solicitud);
-                $solicitud->update($data_update);
+                $solicitud_reserva_aula->periodos()->attach($request->periodos);
+                $solicitud_reserva_aula->update($data_update);
                 return response()->json(['success' => true, 'message' => 'Solicitud actualizada exitosamente'], 201);
             }
         }
