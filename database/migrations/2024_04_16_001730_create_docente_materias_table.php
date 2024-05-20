@@ -17,8 +17,11 @@ class CreateDocenteMateriasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('docente_id');
             $table->unsignedBigInteger('materia_id');
-            $table->integer('grupo');
+            $table->string('grupo');
             $table->timestamps();
+
+            $table->foreign('docente_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('materia_id')->references('id')->on('materia')->onDelete('cascade');
         });
     }
 
@@ -29,6 +32,6 @@ class CreateDocenteMateriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('docente_materias');
+        Schema::dropIfExists('docente_materia');
     }
 }

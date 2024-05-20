@@ -19,7 +19,7 @@ class CreateMateriaTable extends Migration
             $table->string('id_materia');
             $table->integer('codigo');
             $table->string('materia');
-            $table->string('docente');
+            //$table->string('docente');
             $table->string('grupo');
             $table->string('departamento');
         });

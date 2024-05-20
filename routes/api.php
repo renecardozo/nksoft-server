@@ -94,6 +94,8 @@ Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
 Route::put('solicitud/{id}', 'App\Http\Controllers\SolicitudController@stateRequest');
 Route::get('solicitud/{id}', 'App\Http\Controllers\SolicitudController@show');
 Route::post('filtro', 'App\Http\Controllers\SolicitudController@filter');
+Route::post('recomendacion', 'App\Http\Controllers\SolicitudController@recomendacion');
+
 
 
 Route::get('/periodos', 'App\Http\Controllers\PeriodoController@index');
@@ -153,10 +155,8 @@ Route::middleware(['role:Auxiliar'])->group(function(){
 
 #Docente-ini
 Route::middleware(['role:Docente'])->group(function(){
-   Route::get('/solicitudes', 'App\Http\Controllers\SolicitudController@index');
-   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@index');
    Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@post');
+   Route::get('materiass', 'App\Http\Controllers\MateriaController@index');
    Route::put('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@update');
-   Route::delete('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@delete');
 });
 #Docente-fin
