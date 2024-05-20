@@ -34,5 +34,9 @@ class SolicitudReservaAula extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+    public function aulas()
+    {
+        return $this->belongsTo(Aula::class, 'id_aula');
+    }
 
 }
