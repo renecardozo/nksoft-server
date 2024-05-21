@@ -89,6 +89,7 @@ Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
 
+Route::post('/disponibilidad_aulas', 'App\Http\Controllers\EventCheckerController@checkMatches');
 //solicitudes
 
 Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
@@ -131,7 +132,6 @@ Route::get('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReserv
 Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAulaController@store');
 Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
-Route::get('/disponibilidad_aulas', [EventCheckerController::class, 'checkMatches']);
 
 //Docente Materia
 Route::get('/docente_materia',  'App\Http\Controllers\DocenteMateriaController@index');
