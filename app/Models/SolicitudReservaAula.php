@@ -25,11 +25,6 @@ class SolicitudReservaAula extends Model
     {
         return $this->belongsTo(Materia::class, 'id_materia');
     }
-
-    public function periodos()
-    {
-        return $this->belongsToMany(Periodo::class,'solicitud_periodos');
-    }
     public function users()
     {
         return $this->belongsTo(User::class, 'id_user');
@@ -37,6 +32,10 @@ class SolicitudReservaAula extends Model
     public function aulas()
     {
         return $this->belongsTo(Aula::class, 'id_aula');
+    }
+    public function periodos()
+    {
+        return $this->belongsToMany(Periodo::class, 'solicitud_periodos', 'solicitud_reserva_aula_id', 'periodo_id');
     }
 
 }

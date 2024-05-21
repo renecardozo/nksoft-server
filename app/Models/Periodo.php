@@ -14,4 +14,8 @@ class Periodo extends Model
         'horaFin',
         'numero_periodo',
     ];
+    public function solicitud_reserva_aulas()
+    {
+        return $this->belongsToMany(SolicitudReservaAula::class, 'solicitud_periodos', 'periodo_id', 'solicitud_reserva_aula_id');
+    }
 }
