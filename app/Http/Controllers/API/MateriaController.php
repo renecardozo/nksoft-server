@@ -40,7 +40,7 @@ class MateriaController extends Controller
         $materia->codigo = $request->codigo;
         $materia->materia = $request->materia;
         $materia->grupo = $request->grupo;
-        $materia->docente = $request->docente;
+        //$materia->docente = $request->docente;
         $materia->departamento = $request->departamento;
         $materia->save();
     }

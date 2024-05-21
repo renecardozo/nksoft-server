@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aula;
 use App\Models\SolicitudReservaAula;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -14,7 +15,7 @@ class SolicitudController extends Controller
     {
         try {
             $requests = SolicitudReservaAula::orderBy('created_at', 'asc')
-                ->with('materia', 'periodos', 'users')
+                ->with('materia', 'periodos', 'users', 'aulas')
                 ->get();
             return response()->json([
                 'success' => true,
@@ -27,12 +28,42 @@ class SolicitudController extends Controller
             ], 500);
         }
     }
+    public function recomendacion(Request $body)
+    {
+        try {
+            // Convierte la fecha y hora a solo fecha
+            $fecha_reserva = date('Y-m-d', strtotime($body->fecha_hora_reserva));
+
+            // Filtrar solicitudes que estén en conflicto
+            $conflictingAulasIds = SolicitudReservaAula::where('id_horario', $body->periodos['id'])
+                ->whereRaw('DATE(fecha_hora_reserva) = ?', [$fecha_reserva])
+                ->where('estado', '!=', 'Aceptado')
+                ->pluck('id_aula');
+
+            $availableAulas = Aula::whereNotIn('id', $conflictingAulasIds)
+                ->where('capacidadAulas', '>=', $body->cantidad_estudiantes)
+                ->take(3) 
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $availableAulas,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener aulas disponibles',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function filter(Request $body)
     {
         try {
             if ($body->value === 'llegada') {
                 $requests = SolicitudReservaAula::orderBy('created_at', 'desc')
-                    ->with('materia', 'periodos', 'users')
+                    ->with('materia', 'periodos', 'users', 'aulas')
                     ->get();
                 return response()->json([
                     'success' => true,
@@ -40,30 +71,49 @@ class SolicitudController extends Controller
                 ]);
             }
             if ($body->value  == 'urgencia') {
-                $currentDate = Carbon::now()->toDateString();
 
-                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDate)
+                $currentDate = Carbon::now('America/La_Paz')->toDateString();
+                $currentDateTime = $currentDate . ' 00:00:00.000';
+
+                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDateTime)
                     ->orderBy('fecha_hora_reserva', 'asc')
-                    ->with('materia', 'periodos', 'users')
+                    ->with('materia', 'periodos', 'users', 'aulas')
                     ->get();
+
+                // Verificar si hay registros devueltos
+                if ($requests->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No requests found for the current date',
+                        'fec' => $currentDateTime
+
+                    ]);
+                }
                 return response()->json([
                     'success' => true,
                     'data' => $requests,
                 ]);
             }
             if ($body->value  == 'motivo') {
-                // $currentDate = Carbon::now()->toDateString();
+                $requests = SolicitudReservaAula::with('materia', 'periodos', 'users', 'aulas')->get();
 
-                $requests = SolicitudReservaAula::get();
+                if ($requests->isEmpty()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No requests found',
+                    ]);
+                }
+
                 $sortedRequests = $requests->sortBy(function ($request) {
-                    $order = ['Conferencia', 'Examen', 'Reunión', 'Clases'];
+                    $order = ['Conferencia', 'Examen', 'Reunion', 'Clases'];
                     return array_search($request->motivo_reserva, $order);
-                });
-                $sortedRequests->load('materia', 'periodos', 'users');
+                })->values();
+
+                $sortedRequestsArray = $sortedRequests->toArray();
 
                 return response()->json([
                     'success' => true,
-                    'data' => $sortedRequests,
+                    'data' => $sortedRequestsArray,
                 ]);
             }
         } catch (QueryException $e) {

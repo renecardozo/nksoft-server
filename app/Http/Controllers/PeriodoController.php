@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Periodo;
+use App\Models\SolicitudReservaAula;
 use Illuminate\Http\Request;
 
 class PeriodoController extends Controller
@@ -27,5 +28,9 @@ class PeriodoController extends Controller
         $horaCierre = Periodo::orderBy('id')->limit(10)->pluck('horaFin');
 
         return response()->json($horaCierre);
+    }
+    public function solicitudes()
+    {
+        return $this->belongsToMany(SolicitudReservaAula::class);
     }
 }

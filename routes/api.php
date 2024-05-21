@@ -95,6 +95,8 @@ Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
 Route::put('solicitud/{id}', 'App\Http\Controllers\SolicitudController@stateRequest');
 Route::get('solicitud/{id}', 'App\Http\Controllers\SolicitudController@show');
 Route::post('filtro', 'App\Http\Controllers\SolicitudController@filter');
+Route::post('recomendacion', 'App\Http\Controllers\SolicitudController@recomendacion');
+
 
 
 Route::get('/periodos', 'App\Http\Controllers\PeriodoController@index');
@@ -131,14 +133,6 @@ Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudRes
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
 Route::get('/disponibilidad_aulas', [EventCheckerController::class, 'checkMatches']);
 
-#docente-ini
-Route::middleware(['role:docente'])->group(function(){
-   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
-   Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
-   Route::delete('feriados/{id}', 'App\Http\Controllers\FeriadoController@deleteFeriados');
-});
-#docente-fin
-
 //Docente Materia
 Route::get('/docente_materia',  'App\Http\Controllers\DocenteMateriaController@index');
 Route::get('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@getById');
@@ -146,9 +140,3 @@ Route::post('/docente_materia', 'App\Http\Controllers\DocenteMateriaController@s
 Route::delete('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@destroy');
 Route::put('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@update');
 
-#Auxiliar-ini
-Route::middleware(['role:Auxiliar'])->group(function(){
-   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
-   Route::put('feriados/{id}', 'App\Http\Controllers\FeriadoController@editFeriados');
-});
-#Auxiliar-fin
