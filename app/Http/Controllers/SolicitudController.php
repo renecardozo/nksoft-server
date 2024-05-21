@@ -31,20 +31,22 @@ class SolicitudController extends Controller
     public function recomendacion(Request $body)
     {
         try {
-            // Convierte la fecha y hora a solo fecha
             $fecha_reserva = date('Y-m-d', strtotime($body->fecha_hora_reserva));
-
+        
             // Filtrar solicitudes que estén en conflicto
-            $conflictingAulasIds = SolicitudReservaAula::where('id_horario', $body->periodos['id'])
-                ->whereRaw('DATE(fecha_hora_reserva) = ?', [$fecha_reserva])
-                ->where('estado', '!=', 'Aceptado')
-                ->pluck('id_aula');
-
+            $conflictingAulasIds = DB::table('solicitud_periodos')
+                ->join('solicitud_reserva_aulas', 'solicitud_reserva_aulas.id', '=', 'solicitud_periodos.solicitud_reserva_aula_id')
+                ->where('solicitud_periodos.periodo_id', $body->periodos[0]['id'])
+                ->whereDate('solicitud_reserva_aulas.fecha_hora_reserva', $fecha_reserva)
+                ->where('solicitud_reserva_aulas.estado', '!=', 'Aceptado')
+                ->pluck('solicitud_reserva_aulas.id_aula');
+        
+            // Obtener aulas disponibles
             $availableAulas = Aula::whereNotIn('id', $conflictingAulasIds)
                 ->where('capacidadAulas', '>=', $body->cantidad_estudiantes)
-                ->take(3) 
+                ->take(3)
                 ->get();
-
+        
             return response()->json([
                 'success' => true,
                 'data' => $availableAulas,
@@ -56,13 +58,14 @@ class SolicitudController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+        
     }
 
     public function filter(Request $body)
     {
         try {
             if ($body->value === 'llegada') {
-                $requests = SolicitudReservaAula::orderBy('created_at', 'desc')
+                $requests = SolicitudReservaAula::orderBy('created_at', 'asc')
                     ->with('materia', 'periodos', 'users', 'aulas')
                     ->get();
                 return response()->json([
@@ -75,7 +78,7 @@ class SolicitudController extends Controller
                 $currentDate = Carbon::now('America/La_Paz')->toDateString();
                 $currentDateTime = $currentDate . ' 00:00:00.000';
 
-                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva', $currentDateTime)
+                $requests = SolicitudReservaAula::whereDate('fecha_hora_reserva','>=', $currentDateTime)
                     ->orderBy('fecha_hora_reserva', 'asc')
                     ->with('materia', 'periodos', 'users', 'aulas')
                     ->get();
