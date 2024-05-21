@@ -9,6 +9,7 @@ use APP\Http\Controllers\API\MateriaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
+use App\Http\Controllers\EventCheckerController;
 
 
 /*
@@ -128,6 +129,7 @@ Route::get('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReserv
 Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAulaController@store');
 Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
+Route::get('/disponibilidad_aulas', [EventCheckerController::class, 'checkMatches']);
 
 #docente-ini
 Route::middleware(['role:docente'])->group(function(){
