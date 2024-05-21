@@ -98,7 +98,7 @@ class SolicitudController extends Controller
                 ]);
             }
             if ($body->value  == 'motivo') {
-                $requests = SolicitudReservaAula::with('materia', 'periodos', 'users', 'aulas')->get();
+                $requests = SolicitudReservaAula::with(['materia', 'periodos', 'users', 'aulas'])->get();
 
                 if ($requests->isEmpty()) {
                     return response()->json([
@@ -108,7 +108,7 @@ class SolicitudController extends Controller
                 }
 
                 $sortedRequests = $requests->sortBy(function ($request) {
-                    $order = ['Conferencia', 'Examen', 'Reunion', 'Clases'];
+                    $order = ['Conferencia', 'Examen', 'Reunión', 'Clases'];
                     return array_search($request->motivo_reserva, $order);
                 })->values();
 
