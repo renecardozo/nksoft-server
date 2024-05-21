@@ -9,3 +9,13 @@ php artisan make:migration create_docente_table
 
 // to create controller 
 php artisan make:controller DocenteController --resource
+
+// To run de seeder
+
+php artisan db:seed
+
+// to run again the migrations
+php artisan migrate:refresh
+
+// to run a specfici seeder
+php artisan db:seed --class=PermissionsSeeder

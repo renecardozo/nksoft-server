@@ -9,6 +9,7 @@ use APP\Http\Controllers\API\MateriaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
+use App\Http\Controllers\EventCheckerController;
 
 
 /*
@@ -88,6 +89,7 @@ Route::put('/aulas/{id}', 'App\Http\Controllers\AulaController@updateAula');
 Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@horaApertura');
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
 
+Route::post('/disponibilidad_aulas', 'App\Http\Controllers\EventCheckerController@checkMatches');
 //solicitudes
 
 Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
