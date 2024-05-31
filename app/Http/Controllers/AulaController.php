@@ -6,6 +6,7 @@ use App\Models\Aula;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Inhabilitado;
+use Illuminate\Database\QueryException;
 
 class AulaController extends Controller
 {
@@ -125,4 +126,20 @@ public function habilitar(Request $request, $id)
 
     return response()->json(['message' => 'Estado del aula actualizado correctamente']);
 }
+
+    public function show($id)
+    {
+        try {
+            $aula = Aula::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $aula
+            ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al obtener el aula: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
