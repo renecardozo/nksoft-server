@@ -32,7 +32,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/materias', 'App\Http\Controllers\API\MateriaController@index');
 Route::post('/materias', 'App\Http\Controllers\API\MateriaController@store');
 Route::post('/materias2', 'App\Http\Controllers\API\MateriaController@guardar');
-Route::post('/materiasDuplicado', 'App\Http\Controllers\API\MateriaController@verificar'); 
+Route::post('/materiasDuplicado', 'App\Http\Controllers\API\MateriaController@verificar');
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
 
@@ -112,7 +112,7 @@ Route::middleware(['role:SuperAdmin'])->group(function(){
    Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
    Route::put('calendario/{id}', 'App\Http\Controllers\CalendarioController@editCalendario');
    Route::delete('usuarios/{id}', 'App\Http\Controllers\UserController@deleteUsuarios');
-   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias'); 
+   Route::post('materias', 'App\Http\Controllers\MateriaController@createMaterias');
    Route::put('materias/{id}', 'App\Http\Controllers\MateriaController@editMaterias');
    Route::post('roles', 'App\Http\Controllers\RolController@createRoles');
    Route::delete('calendario/{id}', 'App\Http\Controllers\CalendarioController@deleteCalendario');
@@ -140,3 +140,8 @@ Route::post('/docente_materia', 'App\Http\Controllers\DocenteMateriaController@s
 Route::delete('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@destroy');
 Route::put('/docente_materia/{id}', 'App\Http\Controllers\DocenteMateriaController@update');
 
+///backups
+Route::put('/backup', 'App\Http\Controllers\BackupController@createBackup');
+Route::get('/backup', 'App\Http\Controllers\BackupController@index');
+Route::post('/backup', 'App\Http\Controllers\BackupController@cargarBackup');
+Route::post('/backup-delete', 'App\Http\Controllers\BackupController@deleteBackup');
