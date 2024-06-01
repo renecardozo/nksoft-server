@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\EventCheckerController;
+use App\Http\Controllers\BitacoraController;
 
 
 /*
@@ -35,6 +36,14 @@ Route::post('/materias2', 'App\Http\Controllers\API\MateriaController@guardar');
 Route::post('/materiasDuplicado', 'App\Http\Controllers\API\MateriaController@verificar');
 Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
+Route::get('/materia/{id}', 'App\Http\Controllers\API\MateriaController@show');
+
+//Notificacion
+use App\Http\Controllers\API\NotificacionController;
+
+Route::post('/notificaciones', [NotificacionController::class, 'guardar']);
+Route::get('/notificaciones', [NotificacionController::class, 'leer']);
+Route::get('/notificacion2/{id}', [NotificacionController::class, 'mostrar']);
 
 
 Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
@@ -90,6 +99,8 @@ Route::get('periodos/horaApertura', 'App\Http\Controllers\PeriodoController@hora
 Route::get('periodos/horaCierre', 'App\Http\Controllers\PeriodoController@horaCierre');
 
 Route::post('/disponibilidad_aulas', 'App\Http\Controllers\EventCheckerController@checkMatches');
+
+Route::get('aula/{id}', 'App\Http\Controllers\AulaController@show');
 //solicitudes
 
 Route::get('solicitud', 'App\Http\Controllers\SolicitudController@index');
@@ -132,6 +143,8 @@ Route::get('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReserv
 Route::post('/solicitud_reserva_aula', 'App\Http\Controllers\SolicitudReservaAulaController@store');
 Route::delete('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@destroy');
 Route::put('/solicitud_reserva_aula/{id}', 'App\Http\Controllers\SolicitudReservaAulaController@update');
+Route::apiResource('bitacora', BitacoraController::class);
+
 
 //Docente Materia
 Route::get('/docente_materia',  'App\Http\Controllers\DocenteMateriaController@index');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Materia;
+use Illuminate\Database\QueryException;
 
 class MateriaController extends Controller
 {
@@ -124,5 +125,21 @@ class MateriaController extends Controller
             return response()->json(['error' => $th -> getMessage()],500);
         }
 
+    }
+
+    public function show($id)
+    {
+        try {
+            $materia = Materia::find($id);
+            return response()->json([
+                'success' => true,
+                'data' => $materia
+            ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al obtener la Materia: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
