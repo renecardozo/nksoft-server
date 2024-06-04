@@ -24,7 +24,7 @@ class BitacoraController extends Controller
             'email' => 'required|string|email|max:255',
             'role' => 'required|string|max:255',
             'id_resource' => 'required|integer',
-            'name_resource' => 'required|string|max:255',
+            'name_resource' => 'required|string',
             'actions' => 'required|string|max:255',
         ]);
 
