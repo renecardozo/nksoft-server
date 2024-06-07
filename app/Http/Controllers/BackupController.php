@@ -78,12 +78,13 @@ class BackupController extends Controller
     public function createBackup()
     {
         try {
-            $salida = Artisan::call('backup:run', ['--only-db' => true]);
+           // $salida = Artisan::call('backup:run', ['--only-db' => true]);
+            $comando = 'php C:\xampp\htdocs\nksoft-server\artisan backup:run --only-db';
+            $salida = exec($comando);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Backup creado',
-                'salida' => $salida
             ]);
         } catch (Exception $e) {
             return response()->json([
