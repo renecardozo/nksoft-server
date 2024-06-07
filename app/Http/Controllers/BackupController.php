@@ -2,12 +2,11 @@
 
 
 namespace App\Http\Controllers;
+
 use Carbon\Carbon;
-use App\Models\Backup;
 use Exception;
 use Illuminate\Http\Request;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,15 +17,17 @@ class BackupController extends Controller
     public function index()
     {
         try {
-            $files = Storage::disk('public')->files();
-            $filteredFiles = array_filter($files, function($file) {
-                return basename($file) !== '.gitignore';
-            });
-            rsort($filteredFiles);
-    
+            $files = Storage::disk('public_reservas_db')->files('reservas-db');
+            $namefiles = [];
+            foreach ($files as $file) {
+                $namefiles[] = basename($file);
+            }
+
+            rsort($namefiles);
+
             return response()->json([
                 'success' => true,
-                'data' => $filteredFiles
+                'data' => $namefiles
             ]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -35,92 +36,61 @@ class BackupController extends Controller
     public function cargarBackup(Request $request)
     {
         $fileName = $request->input('filename');
-        $filePath = storage_path('app/public/' . $fileName);
+        $filePath = storage_path('app/public/reservas-db/' . $fileName);
 
 
         if (!file_exists($filePath)) {
             return response()->json(['error' => 'El archivo no existe.'], 404);
         }
+        $comando = 'backup:run --only-db --filename=' . $fileName;
 
-        $usuario = 'postgres';
-        $host = 'localhost';
-        $basename = 'reservas';
-        $password = 'postgres';
+        Artisan::call($comando);
 
-
-        $command = "PGPASSWORD={$password} psql -U {$usuario} -h {$host} -d {$basename} -f {$filePath}";
-
-
-        $process = Process::fromShellCommandline($command);
-        $process->run();
-
-        if(!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
         return response()->json([
-            'success'=>true,
+            'success' => true,
             'message' => 'Backup restaurado!.'
         ]);
-
     }
+
 
     public function deleteBackup(Request $request)
     {
         $filename = $request->input('filename');
+        $filePath = storage_path('app/public/reservas-db/' . $filename);
 
-        $filePath = storage_path('app/public/' . $filename);
         if (!File::exists($filePath)) {
-            return response()->json(['error' => 'Archivo no encontrado'], 404);
+            return response()->json(['error' => 'Archivo no encontrado', 'path' => $filePath], 404);
         }
         try {
             File::delete($filePath);
             return response()->json([
                 'success' => true,
-                'message'=>'Backup eliminado'
+                'message' => 'Backup eliminado'
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'success'=>false,
+                'success' => false,
                 'error' => 'Error al eliminar el backup'
             ], 500);
         }
     }
+
     public function createBackup()
     {
-        $usuario = 'postgres';
-        $host = 'localhost';
-        $basename = 'reservas';
-        $password = 'postgres';
+        try {
+           // $salida = Artisan::call('backup:run', ['--only-db' => true]);
+            $comando = 'php C:\xampp\htdocs\nksoft-server\artisan backup:run --only-db';
+            $salida = exec($comando);
 
-       /* $directorio = '/storage/app/public/backup';
-
-        if (!File::exists($directorio)) {
-            File::makeDirectory($directorio);
+            return response()->json([
+                'success' => true,
+                'message' => 'Backup creado',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        if (File::isWritable($directorio)) {
-            File::chmod($directorio, 0775);
-        } else {
-            // Maneja los problemas de permisos
-        }
-        */
-        $currentDate = Carbon::now('America/La_Paz')->format('Y-m-d-H:i:s');
-
-        $backupPath = storage_path('app/public/'.$currentDate.'_backup.sql');
-
-        $command = "PGPASSWORD={$password} pg_dump -U {$usuario} -h {$host} {$basename} > {$backupPath}";
-
-        // Ejecuta el comando
-        $process = Process::fromShellCommandline($command);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        return response()->json([
-            'success'=>true,
-            'message' => 'Backup creado.'
-        ]);
     }
 }
