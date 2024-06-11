@@ -31,11 +31,11 @@ class EventCheckerController extends Controller
 
         // Validate the required parameters
         $validator = Validator::make($request->all(), [
-            'unidadId' => 'required|string',
-            'aulaId' => 'required|string',
-            'aula' => 'required|string',
-            'capacidad' => 'required|integer',
-            'fecha' => 'required|date',
+            'unidadId' => 'string',
+            'aulaId' => 'string',
+            'aula' => 'string',
+            'capacidad' => 'integer',
+            'fecha' => 'date',
         ]);
 
         if (empty($periodos)) {
