@@ -11,6 +11,7 @@ use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\EventCheckerController;
 use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\EventsConfigController;
 
 
 /*
@@ -174,3 +175,7 @@ Route::middleware(['role:Docente'])->group(function(){
    Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@index');
 });
 #Docente-fin
+
+Route::get('/events-config', [EventsConfigController::class, 'index']);
+Route::post('/events-config', [EventsConfigController::class, 'store']);
+Route::put('/events-config/{id}', [EventsConfigController::class, 'update']);
