@@ -10,6 +10,7 @@ use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\EventCheckerController;
 use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\EventsConfigController;
 
 
 /*
