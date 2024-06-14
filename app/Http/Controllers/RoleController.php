@@ -336,6 +336,14 @@ class RoleController extends Controller
                 'method' => 'post',
                 'function' => 'registrarAula'
             ],
+            [
+                'id' => 22,
+                'permission' => 'notificaciones',
+                'controller' => 'NotificacionController',
+                'url' => '/notificaciones',
+                'method' => 'get',
+                'function' => 'index'
+            ],
            
 
         ];

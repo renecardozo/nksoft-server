@@ -37,7 +37,8 @@ class PermissionsSeeder extends Seeder
             'gestionar-docente',
             'gestionar-solicitudes',
             'buscar-aulas',
-            'ver-historial-solicitudes'
+            'ver-historial-solicitudes',
+            'notificaciones',
 
         ];
 
