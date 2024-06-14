@@ -40,6 +40,15 @@ class RoleSeeder extends Seeder
             'buscar-aulas',
             'ver-historial-solicitudes',
         ];
+        $permissionsDocente = [
+            'visualizar-calendario',
+            'visualizar-reserva',
+            'crear-reserva',
+            'editar-reserva',
+            'eliminar-reserva',
+            'buscar-aulas',
+            'notificaciones',
+        ];
         $role = Role::create([
             'name' => 'SuperAdmin',
             'guard_name' => 'api',
@@ -57,5 +66,23 @@ class RoleSeeder extends Seeder
 
         ]);
         $user->assignRole('SuperAdmin');
+
+        $roleDocente = Role::create([
+            'name' => 'Docente',
+            'guard_name' => 'api',
+            'state' => true,
+        ]);
+        $roleDocente->syncPermissions($permissionsDocente);
+        $userDoc = User::create([
+            'name' => 'Patricia',
+            'email' => 'patricia@gmail.com',
+            'password' => '1234567',
+            'last_name' => 'Mercado',
+            'ci' => '987654321',
+            'code_sis' => '200007550',
+            'phone' => '76352617',
+
+        ]);
+        $userDoc->assignRole('Docente');
     }
 }
