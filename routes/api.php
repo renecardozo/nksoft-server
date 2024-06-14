@@ -158,3 +158,14 @@ Route::put('/backup', 'App\Http\Controllers\BackupController@createBackup');
 Route::get('/backup', 'App\Http\Controllers\BackupController@index');
 Route::post('/backup', 'App\Http\Controllers\BackupController@cargarBackup');
 Route::post('/backup-delete', 'App\Http\Controllers\BackupController@deleteBackup');
+
+//Docente
+Route::middleware(['role:Docente'])->group(function(){
+   Route::get('calendario', 'App\Http\Controllers\CalendarioController@index');
+   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@index');
+   Route::delete('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@delete');
+   Route::put('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@update');
+   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@post');
+   Route::get('/notificaciones', 'App\Http\Controllers\NotificacionController@index');
+});
+
