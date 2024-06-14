@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\AulaController;
 use Illuminate\Http\Request;
@@ -68,7 +67,7 @@ Route::post('/create', 'App\Http\Controllers\RoleController@createRole');
 Route::delete('/update/{id}', 'App\Http\Controllers\RoleController@updateStateRole');
 
 Route::get('/role/{id}', 'App\Http\Controllers\RoleController@getRole');
-Route::post('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
+Route::put('/editar/{id}', 'App\Http\Controllers\RoleController@editRole');
 Route::get('/role-permissions', 'App\Http\Controllers\RoleController@getRoles');
 
 //Usuarios
@@ -158,19 +157,3 @@ Route::put('/backup', 'App\Http\Controllers\BackupController@createBackup');
 Route::get('/backup', 'App\Http\Controllers\BackupController@index');
 Route::post('/backup', 'App\Http\Controllers\BackupController@cargarBackup');
 Route::post('/backup-delete', 'App\Http\Controllers\BackupController@deleteBackup');
-#Docente-ini
-Route::middleware(['role:Docente'])->group(function(){
-   Route::get('feriados', 'App\Http\Controllers\FeriadoController@index');
-   Route::get('calendario', 'App\Http\Controllers\CalendarioController@index');
-   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@post');
-});
-#Docente-fin
-#Docente-ini
-Route::middleware(['role:Docente'])->group(function(){
-   Route::get('feriados', 'App\Http\Controllers\FeriadoController@index');
-   Route::get('calendario', 'App\Http\Controllers\CalendarioController@index');
-   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@post');
-   Route::put('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@update');
-   Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@index');
-});
-#Docente-fin
