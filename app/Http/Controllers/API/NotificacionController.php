@@ -5,8 +5,16 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Notificacion;
+use App\Mail\AdminEmail;
+use App\Models\Aula;
+use App\Models\Materia;
+use App\Models\SolicitudReservaAula;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class NotificacionController extends Controller
 {
@@ -29,6 +37,19 @@ class NotificacionController extends Controller
             $notificacion->respuesta = $request->respuesta;
             $notificacion->save();
 
+            $solicitud = SolicitudReservaAula::find($request->id_solicitud);
+            $user = User::find($solicitud->id_user);
+            $aula = Aula::find($solicitud->id_aula);
+            $materia = Materia::find($solicitud->id_materia);
+            Log::info($solicitud); //var_dump($solicitud);
+            $title = "Mensaje de administración";
+            $razon_solicitud = $solicitud->motivo_reserva;
+            $ambiente = $aula->nombreAulas;
+            $materia = $materia->materia;
+            $fecha = Carbon::parse($solicitud->fecha_hora_reserva)->format('d/m/Y');
+            $estado_de_solicitud = $solicitud->estado;
+            $content = $request->respuesta;
+            Mail::to($user->email)->send(new AdminEmail($title, $razon_solicitud, $ambiente, $materia, $fecha, $estado_de_solicitud, $content));
             return response()->json(['message' => 'Notificación guardada con éxito'], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al guardar la notificación', 'details' => $e->getMessage()], 500);
@@ -49,14 +70,14 @@ class NotificacionController extends Controller
     {
         try {
             $notificacion = Notificacion::find($id);
-    
+
             if (!$notificacion) {
                 return response()->json([
                     'success' => false,
                     'error' => 'Notificacion no encontrada'
                 ], 404);
             }
-    
+
             return response()->json([
                 'success' => true,
                 'data' => $notificacion

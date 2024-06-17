@@ -27,7 +27,6 @@ class PermissionsSeeder extends Seeder
             'visualizar-roles',
             'crear-roles',
             'editar-roles',
-            'eliminar-roles',
             'visualizar-materias',
             'crear-materias',
             'visualizar-reserva',
@@ -37,7 +36,8 @@ class PermissionsSeeder extends Seeder
             'gestionar-docente',
             'gestionar-solicitudes',
             'buscar-aulas',
-            'ver-historial-solicitudes'
+            'ver-historial-solicitudes',
+            'notificaciones',
 
         ];
 
