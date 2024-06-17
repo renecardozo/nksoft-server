@@ -44,8 +44,8 @@ class BackupController extends Controller
 
         $usuario = 'postgres';
         $host = 'localhost';
-        $basename = 'reservas';
-        $password = 'postgres';
+        $basename = 'reservas_db';
+        $password = '9421059';
 
 
         $command = "PGPASSWORD={$password} psql -U {$usuario} -h {$host} -d {$basename} -f {$filePath}";
