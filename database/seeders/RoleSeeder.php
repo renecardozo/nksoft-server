@@ -28,7 +28,6 @@ class RoleSeeder extends Seeder
             'visualizar-roles',
             'crear-roles',
             'editar-roles',
-            'eliminar-roles',
             'visualizar-materias',
             'crear-materias',
             'visualizar-reserva',
