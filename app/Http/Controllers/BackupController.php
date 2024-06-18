@@ -47,21 +47,28 @@ class BackupController extends Controller
             'message' => 'El archivo de backup no existe'], 404);
         }
 
-        $usuario = 'postgres';
-        $host = 'localhost';
-        $basename = 'reservas';
-        $password = 'postgres';
+        // Leer el contenido del archivo
+        $sqlScript = Storage::disk('local')->get('public/' . $fileName);
+    
+        // Separar el contenido del archivo en múltiples sentencias SQL
+        $sqlStatements = explode(";\n", $sqlScript);
+        DB::beginTransaction();
 
+        try {
+            $this->dropAllTablesAndSequences();
+            // Ejecutar cada sentencia SQL
+            foreach ($sqlStatements as $statement) {
+                $trimmedStatement = trim($statement);
+                if (!empty($trimmedStatement)) {
+                    if(!$this->tableExists($trimmedStatement)) {
+                    DB::statement($trimmedStatement);
+                    }
+               
+                }
+            }
 
-        $command = "PGPASSWORD={$password} psql -U {$usuario} -h {$host} -d {$basename} -f {$filePath}";
+        DB::commit();
 
-
-        $process = Process::fromShellCommandline($command);
-        $process->run();
-
-        if(!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
         return response()->json([
             'success'=>true,
             'message' => 'Backup cargado correctamente']);
@@ -200,4 +207,4 @@ class BackupController extends Controller
             ], 500);
         }
     }
-
+}
