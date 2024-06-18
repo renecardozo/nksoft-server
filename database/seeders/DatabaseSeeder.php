@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             PeriodoSeeder::class,
             PermissionsSeeder::class,
             RoleSeeder::class,
-            PermissionUnidadesSeeder::class
+            PermissionUnidadesSeeder::class,
+            EventsConfigSeeder::class
         ]);
     }
 }
