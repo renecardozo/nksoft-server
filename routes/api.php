@@ -169,3 +169,6 @@ Route::middleware(['role:Docente'])->group(function(){
    Route::get('/notificaciones', 'App\Http\Controllers\NotificacionController@index');
 });
 
+Route::get('/events-config', [EventsConfigController::class, 'index']);
+Route::post('/events-config', [EventsConfigController::class, 'store']);
+Route::put('/events-config/{id}', [EventsConfigController::class, 'update']);
