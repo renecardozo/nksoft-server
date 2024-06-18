@@ -7,6 +7,7 @@ use App\Models\SolicitudReservaAula;
 use App\Models\Inhabilitado;
 use App\Models\Aula;
 use App\Models\SolicitudPeriodo;
+use App\Models\Periodo;
 use App\Http\Resources\SolicitudReservaAulaResource;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,60 +27,49 @@ class EventCheckerController extends Controller
         $aulaId = $request['aulaId'];
         $capacidad = $request['capacidad'];
         $fecha = $request['fecha'];
-        $unidadId = $request['unidadId'];
         $periodos = $request['periodos'];
 
         // Validate the required parameters
         $validator = Validator::make($request->all(), [
-            'unidadId' => 'string',
-            'aulaId' => 'string',
             'aula' => 'string',
-            'capacidad' => 'integer',
             'fecha' => 'date',
         ]);
-
-        if (empty($periodos)) {
-            return response()->json(['error' => 'No period IDs provided'], 400);
-        }
-
+        
         if ($validator->fails()) {
             return response()->json(['error' => true, 'message' => 'Error al crear solicitud', 'error' => $validator->errors()], 400);
-        } else {
+        } 
+        if (!empty($aulaId)) {
             // Query the RequestRoom model to find any matching records
             $bookings = SolicitudReservaAula::where('id_aula', $aulaId)
-                 ->where('fecha_hora_reserva', $fecha)
+                ->where('fecha_hora_reserva', $fecha)
                 ->whereIn('estado', ['aceptada', 'pendiente'])
                 ->get();
-            // echo $bookings;
-            $isAvailable = Inhabilitado::where('aula_id', $aulaId)
-                ->get();
-            // Check if there are any bookings that match the criteria
-            if ($bookings->isEmpty() && $isAvailable->isEmpty()) {
-                $allSuggestion = Aula::where('unidad_id', $unidadId)
-                    ->where('capacidadAulas', '>=', $capacidad)
-                    ->get();
-                $userRoomWanted = Aula::find($aulaId);
-                return response()->json(['rooms' => $allSuggestion->push($userRoomWanted)], 200);
-            } else {
-                $exists = SolicitudPeriodo::where('solicitud_reserva_aula_id', $bookings[0]['id'])
-                    ->whereIn('periodo_id', $periodos)
-                    ->get();
-                if ($exists->isEmpty()) {
-                    $allSuggestion = Aula::where('unidad_id', $unidadId)
-                        ->where('capacidadAulas', '>=', $capacidad)
-                        ->get();
-                    $userRoomWanted = Aula::find($aulaId);
-                    return response()->json(['rooms' => $allSuggestion->push($userRoomWanted)], 200);
-                } else {
-                    $allSuggestionNotBooked = Aula::where('unidad_id', $unidadId)
-                    ->where('capacidadAulas', '>=', $capacidad)
-                        ->where('id', '!=', $aulaId)
-                        ->get();
-                    return response()->json(['message' => $allSuggestionNotBooked]);
-                    
-                }
+            $bookingIds = collect();
+            foreach ($bookings as $booking) {
+                $bookingIds->push($booking->id);
             }
+            $isInPeriods = SolicitudPeriodo::whereIn('solicitud_reserva_aula_id', $bookingIds)->whereIn('periodo_id', $periodos)->get();
+            $isAvailable = Inhabilitado::where('aula_id', $aulaId)->get();
+            if ($bookings->isEmpty() && $isAvailable->isEmpty() && $isInPeriods->isEmpty()) {
+                
+                $userRoomWanted = Aula::where('id', $aulaId)->get();
+                return response()->json([
+                    // 'allSuggestion' => $allSuggestionByCapacity,
+                    'userRoomWanted' => $userRoomWanted
+                ], 200);
+            } else {
+                return response()->json(['data' => [], 'message' => 'This roon is not available']);
+            }
+        } else if (!empty($capacidad)) {
+            $allSuggestionByCapacity = Aula::where('capacidadAulas', '>=', $capacidad)->get();
+            return response()->json([
+                'allSuggestion' => $allSuggestionByCapacity
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'Seems that your request can not be procesed becuase is missing a valid params like : aula and date'
+            ], 400);
         }
     }
-
 }
