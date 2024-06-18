@@ -11,7 +11,7 @@ use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\EventCheckerController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\EventsConfigController;
-
+use App\Http\Controllers\API\NotificacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,12 +38,10 @@ Route::put('/materias', 'App\Http\Controllers\API\MateriaController@update');
 Route::get('/materias/{id}', 'App\Http\Controllers\API\MateriaController@getById');
 Route::get('/materia/{id}', 'App\Http\Controllers\API\MateriaController@show');
 
-//Notificacion
-use App\Http\Controllers\API\NotificacionController;
 
-Route::post('/notificaciones', [NotificacionController::class, 'guardar']);
-Route::get('/notificaciones', [NotificacionController::class, 'leer']);
-Route::get('/notificacion2/{id}', [NotificacionController::class, 'mostrar']);
+Route::post('/notificaciones', 'App\Http\Controllers\API\NotificacionController@guardar');
+Route::get('/notificaciones', 'App\Http\Controllers\API\NotificacionController@leer');
+Route::get('/notificacion2/{id}', 'App\Http\Controllers\API\NotificacionController@mostrar');
 
 
 Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
@@ -166,7 +164,7 @@ Route::middleware(['role:Docente'])->group(function(){
    Route::delete('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@delete');
    Route::put('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@update');
    Route::get('/reservass', 'App\Http\Controllers\SolicitudReservaAulaController@post');
-   Route::get('/notificaciones', 'App\Http\Controllers\NotificacionController@index');
+   // Route::get('/notificaciones', 'App\Http\Controllers\NotificacionController@index');
 });
 
 Route::get('/events-config', [EventsConfigController::class, 'index']);

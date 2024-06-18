@@ -47,10 +47,10 @@ class BackupController extends Controller
             'message' => 'El archivo de backup no existe'], 404);
         }
 
-        $usuario = 'postgres';
+        $usuario = 'admin_reservas';
         $host = 'localhost';
-        $basename = 'reservas';
-        $password = 'postgres';
+        $basename = 'reservas_db';
+        $password = 'anaiatuya@333';
 
 
         $command = "PGPASSWORD={$password} psql -U {$usuario} -h {$host} -d {$basename} -f {$filePath}";
