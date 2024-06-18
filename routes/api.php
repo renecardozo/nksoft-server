@@ -169,3 +169,10 @@ Route::middleware(['role:Docente'])->group(function(){
    Route::get('/notificaciones', 'App\Http\Controllers\NotificacionController@index');
 });
 
+#Secretaria-ini
+Route::middleware(['role:Secretaria'])->group(function(){
+   Route::get('feriados', 'App\Http\Controllers\FeriadoController@index');
+   Route::get('usuarios', 'App\Http\Controllers\UserController@index');
+   Route::post('feriados', 'App\Http\Controllers\FeriadoController@createFeriados');
+});
+#Secretaria-fin

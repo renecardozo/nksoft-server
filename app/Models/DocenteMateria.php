@@ -18,4 +18,13 @@ class DocenteMateria extends Model
     {
         return $this->hasOne(Materia::class,'id','materia_id');
     }
+    public function getById($id)
+    {
+        try {
+            $docenteMateria = DocenteMateria::findOrFail($id);
+            return response()->json($docenteMateria, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Docente Materia not found'], 404);
+        }
+    }
 }

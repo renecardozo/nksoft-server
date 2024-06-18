@@ -47,13 +47,18 @@ class DocenteMateriaController extends Controller
      * @param  \App\Models\DocenteMateria  $DocenteMateria
      * @return \Illuminate\Http\Response
      */
-    public function getById($id)
-    {
-        if (@DocenteMateria::find($id) == null) {
-            return response()->json(['error' => true, 'message' => 'Solicitud not found'], 404);
-        }
-        return response()->json(new DocenteMateriaResource(DocenteMateria::find($id)));
+    public function getById($usuarioId)
+{
+    $docenteMaterias = DocenteMateria::where('docente_id', $usuarioId)->get();
+
+    if ($docenteMaterias->isEmpty()) {
+        return response()->json(['error' => true, 'message' => 'No se encontraron materias para el usuario'], 404);
     }
+
+    return response()->json(DocenteMateriaResource::collection($docenteMaterias));
+}
+
+
 
 
     public function update(Request $request, $id)
