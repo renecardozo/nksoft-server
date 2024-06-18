@@ -69,7 +69,7 @@ class DocenteMateriaController extends Controller
             "grupo" => "required",
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => true, 'message' => 'Error al actualizar solicitud', 'error' => $validator->errors()], 400);
+            return response()->json(['error' => true, 'message' => 'Error al crear solicitud', 'errors' => $validator->errors()], 400);
         } else {
             $data_update = $request->all();
             $solicitud = DocenteMateria::find($id);
