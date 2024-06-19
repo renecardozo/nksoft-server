@@ -12,4 +12,9 @@ class Notificacion extends Model
     protected $fillable = ['id_solicitud','respuesta'];
     protected $table = 'notificacion';
 
+    public function solicitud()
+    {
+        return $this->belongsTo(SolicitudReservaAula::class, 'id_solicitud');
+    }
+
 }
