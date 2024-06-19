@@ -59,7 +59,7 @@ class NotificacionController extends Controller
     public function leer()
     {
         try {
-            $notificaciones = Notificacion::all();
+            $notificaciones = Notificacion::with(['solicitud','solicitud.aulas'])->get();
             return response()->json($notificaciones, 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al leer las notificaciones', 'details' => $e->getMessage()], 500);
