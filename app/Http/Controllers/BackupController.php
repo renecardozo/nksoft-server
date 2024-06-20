@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
@@ -8,8 +7,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-
 
 class BackupController extends Controller
 {
@@ -38,146 +35,140 @@ class BackupController extends Controller
     public function cargarBackup(Request $request)
     {
         $fileName =$request->input('filename');
-        //$filePath = 'public/'.$fileName;//
-        $filePath=storage_path('app/public/' . $fileName);
+        $filePath = 'public/'.$fileName;//
+       // $filePath=storage_path('app/public/' . $fileName);
+
         // Verifica si el archivo de backup existe
-        if (!Storage::disk('local')->exists('public/' . $fileName)) {
-        return response()->json([
-            'success'=>false,
-            'message' => 'El archivo de backup no existe'], 404);
-        }
-
-        // Leer el contenido del archivo
-        $sqlScript = Storage::disk('local')->get('public/' . $fileName);
-    
-        // Separar el contenido del archivo en múltiples sentencias SQL
-        $sqlStatements = explode(";\n", $sqlScript);
-        DB::beginTransaction();
-
-        try {
-            $this->dropAllTablesAndSequences();
-            // Ejecutar cada sentencia SQL
+        if (Storage::exists($filePath)) {
+            $sqlStatements = explode(";", Storage::get($filePath));
+            $totalErrors = 0;
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
             foreach ($sqlStatements as $statement) {
-                $trimmedStatement = trim($statement);
-                if (!empty($trimmedStatement)) {
-                    if(!$this->tableExists($trimmedStatement)) {
-                    DB::statement($trimmedStatement);
+                $statement = trim($statement);
+                if (!empty($statement)) {
+                    try {
+                        DB::statement($statement . ';');
+                    } catch (\Exception $e) {
+                        $totalErrors++;
                     }
-               
                 }
             }
-
-        DB::commit();
-
-        return response()->json([
-            'success'=>true,
-            'message' => 'Backup cargado correctamente']);
-        } catch (\Exception $e) {
-            DB::rollBack();
-
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            if ($totalErrors <= 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Restauración completada con éxito'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ocurrió un error inesperado, no se pudo hacer la restauración completamente'
+                ]);
+            }
+        } else {
             return response()->json([
-                'success'=>false,
-                'message' => 'Error al cargar el backup: ' . $e->getMessage()
-            ], 500);
+                'success' => false,
+                'message' => 'El archivo de backup no existe'
+            ]);
         }
+
     }
-    private function dropAllTablesAndSequences()
-    {
-        // Obtener todas las tablas
-        $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'");
-    
-        // Eliminar todas las tablas
-        foreach ($tables as $table) {
-            $tableName = $table->table_name;
-            DB::statement("DROP TABLE IF EXISTS $tableName CASCADE");
-        }
-    
-        // Obtener todas las secuencias
-        $sequences = DB::select("SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'public'");
-    
-       // Eliminar todas las secuencias
-        foreach ($sequences as $sequence) {
-            $sequenceName = $sequence->sequence_name;
-            DB::statement("DROP SEQUENCE IF EXISTS $sequenceName CASCADE");
-        }
-    }
-    private function tableExists($statement)
-    {
-        // Extraer el nombre de la tabla de la declaración
-        preg_match('/CREATE TABLE (\w+)/', $statement, $matches);
-        if (!empty($matches[1])) {
-            $tableName = $matches[1];
-            // Verificar si la tabla ya existe en la base de datos
-            return Schema::hasTable($tableName);
-        }
-        return false;
-    }
+
     public function createBackup()
     {
-        // Nombre del archivo de backup
        $currentDate = Carbon::now('America/La_Paz')->format('Y-m-d_H-i-s');
-       $fileName = 'backup_' . $currentDate . '.sql';
-       $path = storage_path('app/public/' . $fileName);
 
-       $sqlScript = "";
+        // Verificar si se puede obtener el nombre de la base de datos
+        try {
+            $databaseName = DB::getDatabaseName();
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=>false,
+                'message' => 'No se pudo establecer la conexión a la base de datos'
+            ]);
+        }
 
-       // Obtener todas las secuencias primero
-       $sequences = DB::select("SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'public'");
-       foreach ($sequences as $sequence) {
-           $sequenceName = $sequence->sequence_name;
+        // Obtener el nombre del archivo de backup
+        $backupName =  'backup_' . $currentDate . '.sql';
 
-           // Obtener el valor actual de la secuencia
-           $currentValueResult = DB::select("SELECT last_value FROM $sequenceName");
-           $currentValue = $currentValueResult[0]->last_value;
+        // Iniciar la construcción del archivo SQL
+        $sql = "-- Respaldo de la base de datos $databaseName\n\n";
 
-           // Crear el script para la secuencia
-            $sqlScript .= "\nCREATE SEQUENCE $sequenceName START WITH $currentValue;\n";
-       }
+        // Agregar configuraciones iniciales
+        $sql .= <<<EOL
+    /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+    /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+    /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+    /*!40101 SET NAMES utf8mb4 */;
+    /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+    /*!40103 SET TIME_ZONE='+00:00' */;
+    /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+    /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+    /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+    /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+    EOL;
 
-        // Obtener todas las tablas
-        $tables = DB::select("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'");
+        // Obtener el listado de tablas en la base de datos
+        $tables = DB::select('SHOW TABLES');
 
-       foreach ($tables as $table) {
-           $tableName = $table->table_name;
+        foreach ($tables as $table) {
+            $tableName = reset($table);
 
-           // Crear la estructura de la tabla
-           $createTableResult = DB::select("SELECT 'CREATE TABLE ' || quote_ident(c.relname) || E'\n(\n' ||
-                                           array_to_string(
-                                               array_agg(
-                                                   '    ' || quote_ident(a.attname) || ' ' || pg_catalog.format_type(a.atttypid, a.atttypmod) ||
-                                                   CASE WHEN a.attnotnull THEN ' NOT NULL' ELSE '' END ||
-                                                   CASE WHEN pg_catalog.pg_get_expr(ad.adbin, ad.adrelid) IS NOT NULL THEN ' DEFAULT ' || pg_catalog.pg_get_expr(ad.adbin, ad.adrelid) ELSE '' END
-                                               ),
-                                               E',\n'
-                                          ) || E'\n);\n' AS create_table
-                                          FROM pg_catalog.pg_attribute a
-                                          JOIN pg_catalog.pg_class c ON a.attrelid = c.oid
-                                          LEFT JOIN pg_catalog.pg_attrdef ad ON a.attrelid = ad.adrelid AND a.attnum = ad.adnum
-                                          WHERE c.relname = :table AND a.attnum > 0 AND NOT a.attisdropped
-                                          GROUP BY c.relname", ['table' => $tableName]);
+            // Agregar comando para eliminar la tabla si existe
+            $sql .= "DROP TABLE IF EXISTS `$tableName`;\n";
 
-           $createTableScript = $createTableResult[0]->create_table;
-          $sqlScript .= "\n\n" . $createTableScript . "\n\n";
+            $tableInfo = DB::select("SHOW CREATE TABLE $tableName");
 
-          // Obtener todos los datos de la tabla
-          $rows = DB::select("SELECT * FROM $tableName");
-           foreach ($rows as $row) {
-               $sqlScript .= "INSERT INTO $tableName VALUES(";
-               foreach ($row as $value) {
-                   if (is_null($value)) {
-                       $sqlScript .= "NULL, ";
-                   } else {
-                       $sqlScript .= "'" . addslashes($value) . "', ";
-                   }
-               }
-               $sqlScript = substr($sqlScript, 0, -2); // Eliminar la última coma y espacio
-               $sqlScript .= ");\n";
-           }
-          $sqlScript .= "\n";
-      }
-    
+            // Agregar comando para crear la tabla de nuevo
+            $sql .= "/*!40101 SET @saved_cs_client = @@character_set_client */;\n";
+            $sql .= "/*!40101 SET character_set_client = utf8 */;\n";
+            $sql .= $tableInfo[0]->{'Create Table'} . ";\n";
+            $sql .= "/*!40101 SET character_set_client = @saved_cs_client */;\n";
+
+            // Bloquear la tabla antes de insertar datos
+            $sql .= "LOCK TABLES `$tableName` WRITE;\n";
+            $sql .= "/*!40000 ALTER TABLE `$tableName` DISABLE KEYS */;\n";
+
+            // Agregar los datos de la tabla al archivo SQL
+            $tableData = DB::table($tableName)->get()->toArray();
+            foreach ($tableData as $row) {
+                $sql .= "INSERT INTO `$tableName` VALUES (";
+
+                // Formatear manualmente cada fila de datos
+                foreach ($row as $key => $value) {
+                    // Si el valor es una cadena, escapar comillas
+                    if (is_string($value)) {
+                        $value = addslashes($value);
+                        $value = "'$value'";
+                    } elseif (is_null($value)) {
+                        $value = 'NULL';
+                    }
+                    $sql .= "$value, ";
+                }
+                // Eliminar la última coma y espacio
+                $sql = rtrim($sql, ', ');
+                $sql .= ");\n";
+            }
+
+            // Desbloquear la tabla después de insertar datos
+            $sql .= "/*!40000 ALTER TABLE `$tableName` ENABLE KEYS */;\n";
+            $sql .= "UNLOCK TABLES;\n\n";
+        }
+
+        // Agregar configuraciones finales
+        $sql .= <<<EOL
+    /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+    /*!40114 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+    /*!40101 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+    /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+    /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+    /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+    /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+    /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+    EOL;
+
       // Guardar el script SQL en el archivo
-      Storage::disk('local')->put('public/' . $fileName, $sqlScript);
+      Storage::disk('local')->put('public/' . $backupName, $sql);
     
       return response()->json([
            'success'=>true,
