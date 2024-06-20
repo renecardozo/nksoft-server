@@ -77,7 +77,7 @@ class RoleSeeder extends Seeder
             'email' => 'patricia@gmail.com',
             'password' => '1234567',
             'last_name' => 'Mercado',
-            'ci' => '987654321',
+            'ci' => '123456789',
             'code_sis' => '200007550',
             'phone' => '76352617',
 
