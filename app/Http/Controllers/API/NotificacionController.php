@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Notificacion;
 use App\Mail\AdminEmail;
+use App\Mail\DescriptionMail;
 use App\Models\Aula;
 use App\Models\Materia;
 use App\Models\SolicitudReservaAula;
@@ -59,7 +60,7 @@ class NotificacionController extends Controller
     public function leer()
     {
         try {
-            $notificaciones = Notificacion::with(['solicitud','solicitud.aulas'])->get();
+            $notificaciones = Notificacion::with(['solicitud', 'solicitud.aulas'])->get();
             return response()->json($notificaciones, 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al leer las notificaciones', 'details' => $e->getMessage()], 500);
@@ -88,5 +89,22 @@ class NotificacionController extends Controller
                 'error' => 'Error al obtener las solicitudes: ' . $e->getMessage()
             ], 500);
         }
+    }
+    public function enviarMasivo(Request $request)
+    {
+        $emails = User::whereIn('id', $request->users)->pluck('email')->toArray();
+        $details = [
+            'mensaje' => $request->mensaje ?? '',
+            'titulo' => $request->titulo ?? '',
+        ];
+        $envios_fallidos = 0;
+        foreach ($emails as $recipient) {
+            try {
+                Mail::to($recipient)->send(new DescriptionMail($details));
+            } catch (\Exception $e) {
+                $envios_fallidos = $envios_fallidos + 1;
+            }
+        }
+        return response()->json('envio completado con fallas:' . $envios_fallidos);
     }
 }

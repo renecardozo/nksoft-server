@@ -42,6 +42,7 @@ Route::get('/materia/{id}', 'App\Http\Controllers\API\MateriaController@show');
 Route::post('/notificaciones', 'App\Http\Controllers\API\NotificacionController@guardar');
 Route::get('/notificaciones', 'App\Http\Controllers\API\NotificacionController@leer');
 Route::get('/notificacion2/{id}', 'App\Http\Controllers\API\NotificacionController@mostrar');
+Route::post('/mensajes_masivos', 'App\Http\Controllers\API\NotificacionController@enviarMasivo');
 
 
 Route::get('/docentes', 'App\Http\Controllers\DocenteController@index');
