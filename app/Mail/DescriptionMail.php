@@ -30,8 +30,6 @@ class DescriptionMail extends Mailable
     public function build()
     {
         return $this->subject($this->details['titulo'])->view('detail_email')
-            ->with([
-                'details' => $this->details
-            ]);
+            ->with(['details' => $this->details]);
     }
 }
