@@ -55,7 +55,7 @@ class EventCheckerController extends Controller
                 $userRoomWanted = Aula::where('id', $aulaId)->get();
                 return response()->json([
                     // 'allSuggestion' => $allSuggestionByCapacity,
-                    'userRoomWanted' => $userRoomWanted
+                    'rooms' => $userRoomWanted
                 ], 200);
             } else {
                 return response()->json(['data' => [], 'message' => 'This roon is not available']);
@@ -63,7 +63,7 @@ class EventCheckerController extends Controller
         } else if (!empty($capacidad)) {
             $allSuggestionByCapacity = Aula::where('capacidadAulas', '>=', $capacidad)->get();
             return response()->json([
-                'allSuggestion' => $allSuggestionByCapacity
+                'rooms' => $allSuggestionByCapacity
             ], 200);
         } else {
             return response()->json([
